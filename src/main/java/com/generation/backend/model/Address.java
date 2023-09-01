@@ -1,9 +1,9 @@
 package com.generation.backend.model;
 
+import com.generation.backend.validation.CEP;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

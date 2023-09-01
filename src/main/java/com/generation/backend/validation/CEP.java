@@ -1,9 +1,9 @@
-package com.apiCorreios.demo.validation;
+package com.generation.backend.validation;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-import com.apiCorreios.demo.exception.CepException;
+import com.generation.backend.exceptions.CepException;
 import jakarta.persistence.*;
 import lombok.*;
 import jakarta.persistence.Column;
