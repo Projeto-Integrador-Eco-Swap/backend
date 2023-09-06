@@ -4,15 +4,23 @@ import com.generation.backend.validation.CEP;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Entity(name = "address")
+@Table(name = "tb_Address")
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "address_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "cep_id")
-    private CEP cep;
+    /*@ManyToOne*/
+    /*@JoinColumn*/
+    @Column(name = "cep_id")
+    private String cep;
 
     @Column(name = "street")
     @NotNull

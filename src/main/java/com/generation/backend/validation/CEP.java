@@ -19,7 +19,7 @@ import jakarta.persistence.Table;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity(name = "CEP")
-@Table(name = "db_cep")
+@Table(name = "tb_cep")
 public final class CEP {
 
     // Expressão regular para validar formatos de CEP
