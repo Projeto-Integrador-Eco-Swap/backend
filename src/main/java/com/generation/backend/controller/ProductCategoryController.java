@@ -84,7 +84,7 @@ public class ProductCategoryController {
     @Transactional
     public ResponseEntity<ProductCategory> updateProductCategory(@RequestBody ProductCategory productCategory) {
         ProductCategory updatedProductCategory = productCategoryService.updateProductCategory(productCategory);
-        return ResponseEntity.status(HttpStatus.OK).body(updatedProductCategory);
+        return ResponseEntity.status(200).body(updatedProductCategory);
     }
 
     /**

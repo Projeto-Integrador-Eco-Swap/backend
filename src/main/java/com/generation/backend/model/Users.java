@@ -1,11 +1,6 @@
 package com.generation.backend.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -19,7 +14,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity(name = "users")
-@Table(name = "tb_Users")
+@Table(name = "tb_Users",
+        schema = "db_ecoswap",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "email", name = "unique_email")
+        })
 public class Users {
 
     @Id
@@ -47,7 +46,6 @@ public class Users {
             nullable = false,
             columnDefinition = "VARCHAR(255)")
     private String password;
-
 
     @Column(name = "picture",
             nullable = false,

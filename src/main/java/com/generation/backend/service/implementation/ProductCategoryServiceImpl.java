@@ -60,6 +60,12 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         return productCategoryRepository.saveAndFlush(productCategory);
     }
 
+    /**
+     * Validates a product category for creation.
+     *
+     * @param productCategory The product category to be validated.
+     * @throws IllegalArgumentException if the product category is not valid for creation.
+     */
     private void validateProductCategoryForCreation(@NotNull ProductCategory productCategory) {
         if (productCategory.getName() == null || productCategory.getName().isEmpty()) {
             throw new IllegalArgumentException("Product category name must not be null or empty.");
@@ -105,7 +111,6 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         ProductCategory existingProductCategory = productCategoryRepository.findById(productCategory.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Cannot find product category with ID " + productCategory.getId() + "."));
 
-        // Update the properties of the existing product category
         existingProductCategory.setName(productCategory.getName());
         existingProductCategory.setDescription(productCategory.getDescription());
         existingProductCategory.setMaterial(productCategory.getMaterial());
@@ -122,6 +127,6 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Override
     public Map<String, String> deleteProductCategoryById(Long id) {
         productCategoryRepository.deleteById(id);
-        return null;
+        return Map.of("message", "Product category with ID " + id + " deleted.");
     }
 }
