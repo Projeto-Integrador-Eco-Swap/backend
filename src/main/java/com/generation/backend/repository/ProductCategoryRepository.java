@@ -8,10 +8,14 @@ import org.springframework.data.repository.query.Param;
 import com.generation.backend.model.ProductCategory;
 
 import jakarta.validation.Valid;
+import org.springframework.stereotype.Repository;
 
 
+@Repository
 public interface ProductCategoryRepository extends JpaRepository<ProductCategory,Long> {
-	  List<ProductCategory> findAllByNameContainingIgnoreCase(@Param("name") String name);
 
-	 ProductCategory updatedCategory(@Valid ProductCategory productcategory);
+	
+	ProductCategory findByName(@Param("name") String name);
+	
+	List<ProductCategory> findAllByNameContainingIgnoreCase(@Param("name") String name);
 }
