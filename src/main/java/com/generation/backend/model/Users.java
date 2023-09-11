@@ -1,40 +1,38 @@
 package com.generation.backend.model;
 
 import jakarta.persistence.*;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.Size;
 
-@Entity(name = "users")
+@Entity
 @Table(name = "tb_Users")
-
-//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-//@DiscriminatorColumn(name = "user_type")
 public class Users {
 
+//  Identificador único da Tabela
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
 	private long id;
 
-	@Column(name = "name")
-	@NotNull
+//  Nome do usuário
+	@NotNull(message = "O Atributo Nome é Obrigatório!")
 	private String name;
 
-//	@ManyToOne
-//	@JoinColumn(name = "mail_id")
+//  Login do usuário
+	@NotNull(message = "O Atributo Nome é Obrigatório!")
+	@Email(message = "O Atributo Usuário deve ser um email válido!")
+	private String user;
 
-	@NotNull
-	private String mail;
-
-	@Column(name = "password")
-	@NotNull
+//  Senha do Usuário
+	@NotBlank(message = "O Atributo Senha é Obrigatório!")
+	@Size(min = 8, message = "A Senha deve ter no mínimo 8 caracteres")
 	private String password;
 
-//	@ManyToOne
-//	@JoinColumn(name = "address_id")
-//	@NotNull
-//	private Address address;
+//  Foto do usuário
+	@Size(max = 5000, message = "O link da foto não pode ser maior do que 5000 caracteres")
+	private String picture;
 
 //  GETTERS e SETTERS
 
@@ -54,12 +52,12 @@ public class Users {
 		this.name = name;
 	}
 
-	public String getMail() {
-		return mail;
+	public String getUser() {
+		return user;
 	}
 
-	public void setMail(String mail) {
-		this.mail = mail;
+	public void setUser(String user) {
+		this.user = user;
 	}
 
 	public String getPassword() {
@@ -70,4 +68,11 @@ public class Users {
 		this.password = password;
 	}
 
+	public String getPicture() {
+		return picture;
+	}
+
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
 }
