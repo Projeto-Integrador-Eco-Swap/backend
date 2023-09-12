@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -119,6 +120,27 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     /**
+     * Atualiza a descrição de uma categoria de produtos existente.
+     *
+     * @param productCategory A categoria de produtos atualizada.
+     * @return A categoria de produtos atualizada.
+     * @throws IllegalArgumentException Se a categoria de produtos não for válida para atualização.
+     */
+    @Override
+    public ProductCategory updateProductCategoryDescription(@NotNull ProductCategory productCategory) {
+        if (productCategory.getId() == null) {
+            throw new IllegalArgumentException("A categoria de produtos a ser atualizada deve ter um ID.");
+        }
+
+        ProductCategory existingProductCategory = productCategoryRepository.findById(productCategory.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Não foi possível encontrar a categoria de produtos com o ID " + productCategory.getId() + "."));
+
+        existingProductCategory.setDescription(productCategory.getDescription());
+
+        return productCategoryRepository.saveAndFlush(existingProductCategory);
+    }
+
+    /**
      * Exclui uma categoria de produtos pelo seu identificador único (ID).
      *
      * @param id O ID da categoria de produtos a ser excluída.
@@ -140,5 +162,48 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     public Map<String, String> deleteProductCategoryByName(String name) {
         productCategoryRepository.deleteByName(name);
         return Map.of("message", "Categoria de produtos com o nome " + name + " foi excluída.");
+    }
+
+    /**
+     * Creates multiple product categories in the database.
+     *
+     * @param productCategories A list of product categories to be created.
+     * @return The list of product categories that have been created.
+     * @throws IllegalArgumentException If the input list is null or empty.
+     */
+    @Override
+    public Iterable<ProductCategory> createMultipleProductCategories(List<ProductCategory> productCategories) {
+        if (productCategories == null || !productCategories.iterator().hasNext()) {
+            throw new IllegalArgumentException("Product categories to be created must not be null or empty.");
+        }
+
+        return productCategoryRepository.saveAllAndFlush(productCategories);
+    }
+
+    /**
+     * Exclui todas as categorias de produtos.
+     *
+     * @return Um mapa com informações sobre a operação de exclusão, como confirmação.
+     */
+    @Override
+    public Map<String, String> deleteAllProductCategories() {
+        productCategoryRepository.deleteAll();
+        return Map.of("message", "Todas as categorias de produtos foram excluídas.");
+    }
+
+    /**
+     * Validates and creates a product category in the database.
+     *
+     * @param category          The product category to be created.
+     * @param createdCategories A list to which the created category will be added.
+     * @throws IllegalArgumentException If the category's ID is not null, indicating it's not a new category.
+     */
+    private void validateAndCreateCategory(@NotNull ProductCategory category, List<ProductCategory> createdCategories) {
+        if (category.getId() != null) {
+            throw new IllegalArgumentException("Category ID must be null for new categories.");
+        }
+
+        ProductCategory createdCategory = productCategoryRepository.save(category);
+        createdCategories.add(createdCategory);
     }
 }

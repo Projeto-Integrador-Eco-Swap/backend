@@ -59,5 +59,34 @@ public interface ProductCategoryService {
      */
     Map<String, String> deleteProductCategoryById(Long id);
 
+    /**
+     * Exclui uma categoria de produtos pelo seu nome.
+     *
+     * @param name O nome da categoria de produtos a ser excluída.
+     * @return Um mapa com informações sobre a operação de exclusão, como confirmação.
+     */
     Map<String, String> deleteProductCategoryByName(String name);
+
+    /**
+     * Cria uma lista de categorias de produtos.
+     *
+     * @param productCategories A lista de categorias de produtos a ser criada.
+     * @return A lista de categorias de produtos criada.
+     */
+    Iterable<ProductCategory> createMultipleProductCategories(List<ProductCategory> productCategories);
+
+    /**
+     * Exclui todas as categorias de produtos.
+     *
+     * @return Um mapa com informações sobre a operação de exclusão, como confirmação.
+     */
+    Map<String, String> deleteAllProductCategories();
+
+    /**
+     * Atualiza a descrição de uma categoria de produtos existente.
+     *
+     * @param productCategory A categoria de produtos atualizada.
+     * @return A categoria de produtos atualizada.
+     */
+    ProductCategory updateProductCategoryDescription(ProductCategory productCategory);
 }

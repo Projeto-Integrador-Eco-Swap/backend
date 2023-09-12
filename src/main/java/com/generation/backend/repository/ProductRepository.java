@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface ProductRepository extends JpaRepository<Product, Long>{
 	
 	Product findByName(@Param("name") String name);
+
+    void deleteByName(String name);
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,6 +53,18 @@ public class ProductCategoryController {
     }
 
     /**
+     * Cria várias categorias de produtos de uma vez.
+     *
+     * @param productCategories Uma lista de categorias de produtos a serem criadas.
+     * @return A lista de categorias de produtos criadas.
+     */
+    @PostMapping("/create-multiple")
+    public ResponseEntity< Iterable<ProductCategory>> createMultipleProductCategories(@RequestBody List<ProductCategory> productCategories) {
+        Iterable<ProductCategory> createdProductCategories = productCategoryService.createMultipleProductCategories(productCategories);
+        return ResponseEntity.status(HttpStatus.OK).body(createdProductCategories);
+    }
+
+    /**
      * Recupera todas as categorias de produtos.
      *
      * @return Uma lista de todas as categorias de produtos no sistema.
@@ -75,6 +88,18 @@ public class ProductCategoryController {
     }
 
     /**
+     * Recupera uma categoria de produtos pelo seu nome.
+     *
+     * @param name O nome da categoria de produtos a ser recuperada.
+     * @return A categoria de produtos com o nome especificado.
+     */
+    @GetMapping("/name/{name}")
+    public ResponseEntity<ProductCategory> getProductCategoryByName(@PathVariable String name) {
+        ProductCategory productCategory = productCategoryService.getProductCategoryByName(name);
+        return ResponseEntity.status(HttpStatus.OK).body(productCategory);
+    }
+
+    /**
      * Atualiza uma categoria de produtos existente.
      *
      * @param productCategory A categoria de produtos atualizada.
@@ -84,6 +109,13 @@ public class ProductCategoryController {
     @Transactional
     public ResponseEntity<ProductCategory> updateProductCategory(@RequestBody ProductCategory productCategory) {
         ProductCategory updatedProductCategory = productCategoryService.updateProductCategory(productCategory);
+        return ResponseEntity.status(200).body(updatedProductCategory);
+    }
+
+    @PutMapping("/update-description")
+    @Transactional
+    public ResponseEntity<ProductCategory> updateProductCategoryDescription(@RequestBody ProductCategory productCategory) {
+        ProductCategory updatedProductCategory = productCategoryService.updateProductCategoryDescription(productCategory);
         return ResponseEntity.status(200).body(updatedProductCategory);
     }
 
@@ -97,6 +129,31 @@ public class ProductCategoryController {
     @Transactional
     public ResponseEntity<Map<String, String>> deleteProductCategory(@PathVariable Long id) {
         Map<String, String> response = productCategoryService.deleteProductCategoryById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    /**
+     * Exclui todas as categorias de produtos.
+     *
+     * @return Um mapa com informações sobre a operação de exclusão.
+     */
+    @DeleteMapping("/delete-all")
+    @Transactional
+    public ResponseEntity<Map<String, String>> deleteAllProductCategories() {
+        Map<String, String> response = productCategoryService.deleteAllProductCategories();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    /**
+     * Exclui uma categoria de produtos pelo seu nome.
+     *
+     * @param name O nome da categoria de produtos a ser excluída.
+     * @return Um mapa com informações sobre a operação de exclusão.
+     */
+    @DeleteMapping("/delete-by-name/{name}")
+    @Transactional
+    public ResponseEntity<Map<String, String>> deleteProductCategoryByName(@PathVariable String name) {
+        Map<String, String> response = productCategoryService.deleteProductCategoryByName(name);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
