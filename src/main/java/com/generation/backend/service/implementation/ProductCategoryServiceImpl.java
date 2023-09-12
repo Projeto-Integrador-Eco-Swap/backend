@@ -1,6 +1,6 @@
 package com.generation.backend.service.implementation;
 
-import com.generation.backend.model.ProductCategory;
+import com.generation.backend.entity.ProductCategory;
 import com.generation.backend.repository.ProductCategoryRepository;
 import com.generation.backend.service.ProductCategoryService;
 import org.jetbrains.annotations.NotNull;
@@ -12,20 +12,20 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * The implementation of the product category service.
+ * Implementação do serviço de categoria de produtos.
  */
 @Service
 public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     /**
-     * The repository for product categories.
+     * Repositório de categorias de produtos.
      */
     private final ProductCategoryRepository productCategoryRepository;
 
     /**
-     * Creates a new product category service.
+     * Cria um novo serviço de categoria de produtos.
      *
-     * @param productCategoryRepository The repository for product categories.
+     * @param productCategoryRepository Repositório de categorias de produtos.
      */
     @Autowired
     public ProductCategoryServiceImpl(ProductCategoryRepository productCategoryRepository) {
@@ -33,9 +33,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     /**
-     * Retrieves a list of all product categories.
+     * Obtém uma lista de todas as categorias de produtos.
      *
-     * @return A list containing all product categories in the system.
+     * @return Uma lista contendo todas as categorias de produtos no sistema.
      */
     @Override
     public List<ProductCategory> getAllProductCategories() {
@@ -43,40 +43,40 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     /**
-     * Creates a new product category.
+     * Cria uma nova categoria de produtos.
      *
-     * @param productCategory The product category to be created.
-     * @return The created product category.
-     * @throws IllegalArgumentException if the product category is not valid for creation.
+     * @param productCategory A categoria de produtos a ser criada.
+     * @return A categoria de produtos criada.
+     * @throws IllegalArgumentException Se a categoria de produtos não for válida para criação.
      */
     @Override
     public ProductCategory createProductCategory(@NotNull ProductCategory productCategory) {
         validateProductCategoryForCreation(productCategory);
 
         if (productCategory.getId() != null) {
-            throw new IllegalArgumentException("Product category to be created must not have an ID.");
+            throw new IllegalArgumentException("A categoria de produtos a ser criada não deve ter um ID.");
         }
 
         return productCategoryRepository.saveAndFlush(productCategory);
     }
 
     /**
-     * Validates a product category for creation.
+     * Valida uma categoria de produtos para criação.
      *
-     * @param productCategory The product category to be validated.
-     * @throws IllegalArgumentException if the product category is not valid for creation.
+     * @param productCategory A categoria de produtos a ser validada.
+     * @throws IllegalArgumentException Se a categoria de produtos não for válida para criação.
      */
     private void validateProductCategoryForCreation(@NotNull ProductCategory productCategory) {
         if (productCategory.getName() == null || productCategory.getName().isEmpty()) {
-            throw new IllegalArgumentException("Product category name must not be null or empty.");
+            throw new IllegalArgumentException("O nome da categoria de produtos não deve ser nulo ou vazio.");
         }
     }
 
     /**
-     * Retrieves a product category by its unique identifier (ID).
+     * Obtém uma categoria de produtos pelo seu identificador único (ID).
      *
-     * @param id The ID of the product category to retrieve.
-     * @return The product category with the specified ID, or null if not found.
+     * @param id O ID da categoria de produtos a ser recuperada.
+     * @return A categoria de produtos com o ID especificado, ou null se não encontrada.
      */
     @Override
     public ProductCategory getProductCategoryById(Long id) {
@@ -85,10 +85,10 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     /**
-     * Retrieves a product category by its name.
+     * Obtém uma categoria de produtos pelo nome.
      *
-     * @param name The name of the product category to retrieve.
-     * @return The product category with the specified name, or null if not found.
+     * @param name O nome da categoria de produtos a ser recuperada.
+     * @return A categoria de produtos com o nome especificado, ou null se não encontrada.
      */
     @Override
     public ProductCategory getProductCategoryByName(String name) {
@@ -96,20 +96,20 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     /**
-     * Updates an existing product category.
+     * Atualiza uma categoria de produtos existente.
      *
-     * @param productCategory The updated product category.
-     * @return The updated product category.
-     * @throws IllegalArgumentException if the product category is not valid for updating.
+     * @param productCategory A categoria de produtos atualizada.
+     * @return A categoria de produtos atualizada.
+     * @throws IllegalArgumentException Se a categoria de produtos não for válida para atualização.
      */
     @Override
     public ProductCategory updateProductCategory(@NotNull ProductCategory productCategory) {
         if (productCategory.getId() == null) {
-            throw new IllegalArgumentException("Product category to be updated must have an ID.");
+            throw new IllegalArgumentException("A categoria de produtos a ser atualizada deve ter um ID.");
         }
 
         ProductCategory existingProductCategory = productCategoryRepository.findById(productCategory.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Cannot find product category with ID " + productCategory.getId() + "."));
+                .orElseThrow(() -> new IllegalArgumentException("Não foi possível encontrar a categoria de produtos com o ID " + productCategory.getId() + "."));
 
         existingProductCategory.setName(productCategory.getName());
         existingProductCategory.setDescription(productCategory.getDescription());
@@ -119,14 +119,26 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     /**
-     * Deletes a product category by its unique identifier (ID).
+     * Exclui uma categoria de produtos pelo seu identificador único (ID).
      *
-     * @param id The ID of the product category to delete.
-     * @return
+     * @param id O ID da categoria de produtos a ser excluída.
+     * @return Um mapa contendo uma mensagem de confirmação após a exclusão.
      */
     @Override
     public Map<String, String> deleteProductCategoryById(Long id) {
         productCategoryRepository.deleteById(id);
-        return Map.of("message", "Product category with ID " + id + " deleted.");
+        return Map.of("message", "Categoria de produtos com o ID " + id + " foi excluída.");
+    }
+
+    /**
+     * Exclui uma categoria de produtos pelo seu nome.
+     *
+     * @param name O nome da categoria de produtos a ser excluída.
+     * @return Um mapa contendo uma mensagem de confirmação após a exclusão.
+     */
+    @Override
+    public Map<String, String> deleteProductCategoryByName(String name) {
+        productCategoryRepository.deleteByName(name);
+        return Map.of("message", "Categoria de produtos com o nome " + name + " foi excluída.");
     }
 }

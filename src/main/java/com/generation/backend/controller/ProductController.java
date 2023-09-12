@@ -1,6 +1,6 @@
 package com.generation.backend.controller;
 
-import com.generation.backend.model.Products;
+import com.generation.backend.entity.Product;
 import com.generation.backend.service.ProductService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +35,8 @@ public class ProductController {
      * @return O produto criado.
      */
     @PostMapping("/create")
-    public ResponseEntity<Products> createProduct(@RequestBody Products product) {
-        Products createdProduct = productService.createProduct(product);
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+        Product createdProduct = productService.createProduct(product);
         return ResponseEntity.ok(createdProduct);
     }
 
@@ -46,8 +46,8 @@ public class ProductController {
      * @return Uma lista de todos os produtos.
      */
     @GetMapping("/all")
-    public ResponseEntity<Iterable<Products>> getAllProducts() {
-        Iterable<Products> products = productService.getAllProducts();
+    public ResponseEntity<Iterable<Product>> getAllProducts() {
+        Iterable<Product> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
 
@@ -58,8 +58,8 @@ public class ProductController {
      * @return O produto com o ID especificado, ou um erro 404 se não for encontrado.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Products> getProductById(@PathVariable Long id) {
-        Products product = productService.getProductById(id);
+    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+        Product product = productService.getProductById(id);
         return ResponseEntity.ok(product);
     }
 
@@ -71,8 +71,8 @@ public class ProductController {
      */
     @PutMapping("/update")
     @Transactional
-    public ResponseEntity<Products> updateProduct(@RequestBody Products product) {
-        Products updatedProduct = productService.updateProduct(product);
+    public ResponseEntity<Product> updateProduct(@RequestBody Product product) {
+        Product updatedProduct = productService.updateProduct(product);
         return ResponseEntity.ok(updatedProduct);
     }
 

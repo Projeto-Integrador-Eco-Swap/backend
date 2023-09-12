@@ -1,12 +1,12 @@
-package com.generation.backend.model;
+package com.generation.backend.entity;
 
+import com.generation.backend.annotation.Phone;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -17,15 +17,20 @@ import lombok.Setter;
 @Table(name = "tb_Users",
         schema = "db_ecoswap",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "email", name = "unique_email")
+                @UniqueConstraint(
+                        columnNames = "email",
+                        name = "unique_email"
+                )
         })
-public class Users {
+public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY,
+            generator = "users_sequence"
+    )
     @Column(name = "id",
             nullable = false,
-            unique = true,
             columnDefinition = "BIGINT UNSIGNED")
     @EqualsAndHashCode.Include
     private Long id;
@@ -40,15 +45,25 @@ public class Users {
             nullable = false,
             unique = true,
             columnDefinition = "VARCHAR(255)")
-    private String user;
+    private String email;
 
     @Column(name = "password",
             nullable = false,
             columnDefinition = "VARCHAR(255)")
     private String password;
 
-    @Column(name = "picture",
+    @Column(name = "phone",
+            columnDefinition = "VARCHAR(255)")
+    @Phone
+    private String phone;
+
+    @Column(name = "birth_date",
             nullable = false,
+            columnDefinition = "DATE")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthDate;
+
+    @Column(name = "picture",
             columnDefinition = "VARCHAR(5000)")
     private String picture;
 }

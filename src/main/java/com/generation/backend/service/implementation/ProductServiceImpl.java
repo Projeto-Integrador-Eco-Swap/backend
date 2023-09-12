@@ -1,10 +1,10 @@
 package com.generation.backend.service.implementation;
 
-import com.generation.backend.model.Products;
+import com.generation.backend.entity.Product;
+import com.generation.backend.repository.ProductRepository;
 import com.generation.backend.service.ProductService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
-import com.generation.backend.repository.ProductsRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -19,15 +19,15 @@ public class ProductServiceImpl implements ProductService {
     /**
      * O repositório de produtos.
      */
-    private final ProductsRepository productsRepository;
+    private final ProductRepository productRepository;
 
     /**
      * Cria um novo serviço de produto.
      *
-     * @param productsRepository O repositório de produtos.
+     * @param productRepository O repositório de produtos.
      */
-    public ProductServiceImpl(ProductsRepository productsRepository) {
-        this.productsRepository = productsRepository;
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     /**
@@ -36,8 +36,8 @@ public class ProductServiceImpl implements ProductService {
      * @return Uma lista contendo todos os produtos no sistema.
      */
     @Override
-    public List<Products> getAllProducts() {
-        return productsRepository.findAll();
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
     }
 
     /**
@@ -47,17 +47,17 @@ public class ProductServiceImpl implements ProductService {
      * @return O produto criado.
      */
     @Override
-    public Products createProduct(Products product) {
+    public Product createProduct(Product product) {
         validateProductForCreation(product);
 
         if (product.getId() != null) {
             throw new IllegalArgumentException("Product to be created must not have an ID.");
         }
 
-        return productsRepository.saveAndFlush(product);
+        return productRepository.saveAndFlush(product);
     }
 
-    private void validateProductForCreation(Products product) {
+    private void validateProductForCreation(Product product) {
     }
 
     /**
@@ -67,8 +67,8 @@ public class ProductServiceImpl implements ProductService {
      * @return O produto com o ID especificado, ou null se não for encontrado.
      */
     @Override
-    public Products getProductById(Long id) {
-        Optional<Products> optionalProduct = productsRepository.findById(id);
+    public Product getProductById(Long id) {
+        Optional<Product> optionalProduct = productRepository.findById(id);
         return optionalProduct.orElse(null);
     }
 
@@ -79,8 +79,8 @@ public class ProductServiceImpl implements ProductService {
      * @return O produto com o nome especificado, ou null se não for encontrado.
      */
     @Override
-    public Products getProductByName(String name) {
-        return productsRepository.findByName(name);
+    public Product getProductByName(String name) {
+        return productRepository.findByName(name);
     }
 
     /**
@@ -90,20 +90,21 @@ public class ProductServiceImpl implements ProductService {
      * @return O produto atualizado.
      */
     @Override
-    public Products updateProduct(@NotNull Products product) {
+    public Product updateProduct(@NotNull Product product) {
         if (product.getId() == null) {
             throw new IllegalArgumentException("Product to be updated must have an ID.");
         }
 
-        Products existingProduct = productsRepository.findById(product.getId())
+        Product existingProduct = productRepository.findById(product.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Product to be updated must exist."));
 
         existingProduct.setName(product.getName());
-        existingProduct.setDescription(product.getDescription());
-        existingProduct.setAmount(product.getAmount());
         existingProduct.setPrice(product.getPrice());
-
-        return productsRepository.saveAndFlush(existingProduct);
+        existingProduct.setUrl(product.getUrl());
+        existingProduct.setActivated(product.isActivated());
+        existingProduct.setCategory(product.getCategory());
+        
+        return productRepository.saveAndFlush(existingProduct);
     }
 
     /**
@@ -113,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public Map<String, String> deleteProductById(Long id) {
-        productsRepository.deleteById(id);
+        productRepository.deleteById(id);
         return Map.of("message", "Product deleted successfully.");
     }
 }

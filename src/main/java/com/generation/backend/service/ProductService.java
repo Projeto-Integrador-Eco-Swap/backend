@@ -1,6 +1,6 @@
 package com.generation.backend.service;
 
-import com.generation.backend.model.Products;
+import com.generation.backend.entity.Product;
 
 import java.util.List;
 import java.util.Map;
@@ -9,21 +9,14 @@ import java.util.Map;
  * Interface que define os serviços relacionados aos produtos.
  */
 public interface ProductService {
-
-    /**
-     * Recupera uma lista de todos os produtos.
-     *
-     * @return Uma lista contendo todos os produtos no sistema.
-     */
-    List<Products> getAllProducts();
-
+    
     /**
      * Cria um novo produto.
      *
      * @param product O produto a ser criado.
      * @return O produto criado.
      */
-    Products createProduct(Products product);
+    Product createProduct(Product product);
 
     /**
      * Recupera um produto pelo seu ID único.
@@ -31,7 +24,14 @@ public interface ProductService {
      * @param id O ID do produto a ser recuperado.
      * @return O produto com o ID especificado, ou null se não for encontrado.
      */
-    Products getProductById(Long id);
+    Product getProductById(Long id);
+
+    /**
+     * Recupera uma lista de todos os produtos.
+     *
+     * @return Uma lista contendo todos os produtos no sistema.
+     */
+    List<Product> getAllProducts();
 
     /**
      * Recupera um produto pelo seu nome.
@@ -39,7 +39,7 @@ public interface ProductService {
      * @param name O nome do produto a ser recuperado.
      * @return O produto com o nome especificado, ou null se não for encontrado.
      */
-    Products getProductByName(String name);
+    Product getProductByName(String name);
 
     /**
      * Atualiza um produto existente.
@@ -47,7 +47,7 @@ public interface ProductService {
      * @param product O produto atualizado.
      * @return O produto atualizado.
      */
-    Products updateProduct(Products product);
+    Product updateProduct(Product product);
 
     /**
      * Exclui um produto pelo seu ID único.

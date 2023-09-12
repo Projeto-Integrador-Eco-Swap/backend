@@ -1,6 +1,6 @@
 package com.generation.backend.controller;
 
-import com.generation.backend.model.ProductCategory;
+import com.generation.backend.entity.ProductCategory;
 import com.generation.backend.service.ProductCategoryService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;

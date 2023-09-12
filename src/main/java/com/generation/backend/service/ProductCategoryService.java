@@ -1,6 +1,6 @@
 package com.generation.backend.service;
 
-import com.generation.backend.model.ProductCategory;
+import com.generation.backend.entity.ProductCategory;
 
 import java.util.List;
 import java.util.Map;
@@ -10,13 +10,6 @@ import java.util.Map;
  * Os serviços permitem a consulta, criação, atualização e exclusão de categorias de produtos.
  */
 public interface ProductCategoryService {
-
-    /**
-     * Recupera uma lista de todas as categorias de produtos.
-     *
-     * @return Uma lista contendo todas as categorias de produtos no sistema.
-     */
-    List<ProductCategory> getAllProductCategories();
 
     /**
      * Cria uma nova categoria de produtos.
@@ -33,6 +26,14 @@ public interface ProductCategoryService {
      * @return A categoria de produtos com o ID especificado ou nulo se não encontrada.
      */
     ProductCategory getProductCategoryById(Long id);
+
+
+    /**
+     * Recupera uma lista de todas as categorias de produtos.
+     *
+     * @return Uma lista contendo todas as categorias de produtos no sistema.
+     */
+    List<ProductCategory> getAllProductCategories();
 
     /**
      * Recupera uma categoria de produtos pelo seu nome.
@@ -57,4 +58,6 @@ public interface ProductCategoryService {
      * @return Um mapa com informações sobre a operação de exclusão, como confirmação.
      */
     Map<String, String> deleteProductCategoryById(Long id);
+
+    Map<String, String> deleteProductCategoryByName(String name);
 }

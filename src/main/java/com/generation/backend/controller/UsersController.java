@@ -1,10 +1,18 @@
 package com.generation.backend.controller;
 
-import com.generation.backend.model.Users;
+import com.generation.backend.entity.User;
 import com.generation.backend.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controlador responsável por gerenciar endpoints relacionados aos usuários.
@@ -35,8 +43,8 @@ public class UsersController {
      * @return O usuário criado.
      */
     @PostMapping("/create")
-    public ResponseEntity<Users> createUser(@RequestBody Users user) {
-        Users createdUser = userService.createUser(user);
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User createdUser = userService.createUser(user);
         return ResponseEntity.ok(createdUser);
     }
 
@@ -46,8 +54,8 @@ public class UsersController {
      * @return Uma lista de todos os usuários.
      */
     @GetMapping("/all")
-    public ResponseEntity<Iterable<Users>> getAllUsers() {
-        Iterable<Users> users = userService.getAllUsers();
+    public ResponseEntity<Iterable<User>> getAllUsers() {
+        Iterable<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
@@ -58,9 +66,35 @@ public class UsersController {
      * @return O usuário com o ID especificado, ou nulo se não encontrado.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Users> getUserById(@PathVariable Long id) {
-        Users user = userService.getUserById(id);
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        User user = userService.getUserById(id);
         return ResponseEntity.ok(user);
+    }
+
+    /**
+     * Obtém um usuário pelo seu nome.
+     *
+     * @param name O nome do usuário a ser obtido.
+     * @return O usuário com o nome especificado, ou null se não encontrado.
+     */
+    @GetMapping("/name/{name}")
+    public ResponseEntity<User> getUserByName(@PathVariable String name) {
+        User user = userService.getUserByName(name);
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/update/birthdate")
+    @Transactional
+    public ResponseEntity<User> updateUserBirthDate(@RequestBody User user) {
+        User updatedUser = userService.updateUserBirthDate(user);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @PutMapping("/update/password")
+    @Transactional
+    public ResponseEntity<User> updateUserPassword(@RequestBody User user) {
+        User updatedUser = userService.updateUserPassword(user);
+        return ResponseEntity.ok(updatedUser);
     }
 
     /**
@@ -71,8 +105,8 @@ public class UsersController {
      */
     @PutMapping("/update")
     @Transactional
-    public ResponseEntity<Users> updateUser(@RequestBody Users user) {
-        Users updatedUser = userService.updateUser(user);
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
+        User updatedUser = userService.updateUser(user);
         return ResponseEntity.ok(updatedUser);
     }
 
@@ -85,6 +119,18 @@ public class UsersController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUserById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Exclui um usuário pelo seu nome.
+     *
+     * @param name O nome do usuário a ser excluído.
+     * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
+     */
+    @DeleteMapping("/delete/name/{name}")
+    public ResponseEntity<Void> deleteUserByName(@PathVariable String name) {
+        userService.deleteUserByName(name);
         return ResponseEntity.ok().build();
     }
 }
