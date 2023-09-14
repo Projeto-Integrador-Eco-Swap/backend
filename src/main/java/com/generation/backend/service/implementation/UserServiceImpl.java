@@ -6,6 +6,7 @@ import com.generation.backend.service.UserService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,6 +175,105 @@ public class UserServiceImpl implements UserService {
         existingUser.setPassword(user.getPassword());
 
         return userRepository.saveAndFlush(existingUser);
+    }
+
+    /**
+     * Obtém um usuário pelo seu nome e senha.
+     *
+     * @param name     O nome do usuário a ser obtido.
+     * @param password A senha do usuário a ser obtido.
+     * @return O usuário com o nome e senha especificados, ou null se não encontrado.
+     */
+    @Override
+    public User getUserByNameAndPassword(String name, String password) {
+        return userRepository.findByNameAndPassword(name, password);
+    }
+
+    /**
+     * Procura um usuário pelo nome e lança uma exceção se não for encontrado.
+     *
+     * @param name  O nome do usuário a ser encontrado.
+     * @param email
+     * @return O usuário encontrado.
+     * @throws IllegalArgumentException Se o usuário não for encontrado.
+     */
+    @Override
+    public User getUserByNameAndEmail(String name, String email) {
+        return userRepository.findByNameAndEmail(name, email);
+    }
+
+    /**
+     * Obtém um usuário pela sua data de nascimento.
+     *
+     * @param birthDate A data de nascimento do usuário a ser obtido.
+     * @return O usuário com a data de nascimento especificada, ou null se não encontrado.
+     */
+    @Override
+    public User getUserByBirthDay(String birthDate) {
+        return userRepository.findByBirthDate(LocalDate.parse(birthDate));
+    }
+
+
+    /**
+     * Exclui um usuário pelo seu nome e senha.
+     *
+     * @param name     O nome do usuário a ser excluído.
+     * @param password A senha do usuário a ser excluído.
+     * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
+     */
+    @Override
+    public void deleteUserByNameAndPassword(String name, String password) {
+        User userToDelete = userRepository.findByNameAndPassword(name, password);
+
+        if (userToDelete != null) {
+            userRepository.delete(userToDelete);
+        } else {
+            throw new IllegalArgumentException("Usuário com o nome e senha especificados não encontrado.");
+        }
+    }
+
+    /**
+     * Exclui um usuário pelo seu nome e email.
+     *
+     * @param name  O nome do usuário a ser excluído.
+     * @param email O email do usuário a ser excluído.
+     * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
+     */
+    @Override
+    public void deleteUserByNameAndEmail(String name, String email) {
+        User userToDelete = userRepository.findByNameAndEmail(name, email);
+
+        if (userToDelete != null) {
+            userRepository.delete(userToDelete);
+        } else {
+            throw new IllegalArgumentException("Usuário com o nome e email especificados não encontrado.");
+        }
+    }
+
+    /**
+     * Exclui um usuário pela sua data de nascimento.
+     *
+     * @param birthDate A data de nascimento do usuário a ser excluído.
+     * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
+     */
+    public void deleteUserByBirthDay(String birthDate) {
+        User userToDelete = userRepository.findByBirthDate(LocalDate.parse(birthDate));
+
+        if (userToDelete != null) {
+            // Se o usuário for encontrado, exclua-o.
+            userRepository.delete(userToDelete);
+        } else {
+            // Caso contrário, lance uma exceção ou lide com a situação de usuário não encontrado de outra forma.
+            throw new IllegalArgumentException("Usuário com a data de nascimento especificada não encontrado.");
+        }
+    }
+
+    /**
+     * Exclui todos os usuários.
+     */
+    @Override
+    public void deleteAllUsers() {
+        userRepository.deleteAll();
     }
 
     /**

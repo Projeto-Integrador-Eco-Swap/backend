@@ -48,6 +48,7 @@ public class UsersController {
         return ResponseEntity.ok(createdUser);
     }
 
+
     /**
      * Obtém todos os usuários cadastrados no sistema.
      *
@@ -83,18 +84,42 @@ public class UsersController {
         return ResponseEntity.ok(user);
     }
 
-    @PutMapping("/update/birthdate")
-    @Transactional
-    public ResponseEntity<User> updateUserBirthDate(@RequestBody User user) {
-        User updatedUser = userService.updateUserBirthDate(user);
-        return ResponseEntity.ok(updatedUser);
+    /**
+     * Obtém um usuário pelo seu nome e senha.
+     *
+     * @param name O nome do usuário a ser obtido.
+     * @param password A senha do usuário a ser obtido.
+     * @return O usuário com o nome e senha especificados, ou null se não encontrado.
+     */
+    @GetMapping("/name/{name}/password/{password}")
+    public ResponseEntity<User> getUserByNameAndPassword(@PathVariable String name, @PathVariable String password) {
+        User user = userService.getUserByNameAndPassword(name, password);
+        return ResponseEntity.ok(user);
     }
 
-    @PutMapping("/update/password")
-    @Transactional
-    public ResponseEntity<User> updateUserPassword(@RequestBody User user) {
-        User updatedUser = userService.updateUserPassword(user);
-        return ResponseEntity.ok(updatedUser);
+    /**
+     * Obtém um usuário pelo seu nome e email.
+     *
+     * @param name O nome do usuário a ser obtido.
+     * @param email O email do usuário a ser obtido.
+     * @return O usuário com o nome e email especificados, ou null se não encontrado.
+     */
+    @GetMapping("/name/{name}/email/{email}")
+    public ResponseEntity<User> getUserByNameAndEmail(@PathVariable String name, @PathVariable String email) {
+        User user = userService.getUserByNameAndEmail(name, email);
+        return ResponseEntity.ok(user);
+    }
+
+    /**
+     * Obtém um usuário pela sua data de nascimento.
+     *
+     * @param birthDate A data de nascimento do usuário a ser obtido.
+     * @return O usuário com a data de nascimento especificada, ou null se não encontrado.
+     */
+    @GetMapping("/birthdate/{birthDate}")
+    public ResponseEntity<User> getUserByBirthDay(@PathVariable String birthDate) {
+        User user = userService.getUserByBirthDay(birthDate);
+        return ResponseEntity.ok(user);
     }
 
     /**
@@ -109,6 +134,33 @@ public class UsersController {
         User updatedUser = userService.updateUser(user);
         return ResponseEntity.ok(updatedUser);
     }
+
+    /**
+     * Atualiza o nome de um usuário existente.
+     *
+     * @param user O usuário atualizado.
+     * @return O usuário atualizado.
+     */
+    @PutMapping("/update/birthdate")
+    @Transactional
+    public ResponseEntity<User> updateUserBirthDate(@RequestBody User user) {
+        User updatedUser = userService.updateUserBirthDate(user);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    /**
+     * Atualiza a senha de um usuário existente.
+     *
+     * @param user O usuário atualizado.
+     * @return O usuário atualizado.
+     */
+    @PutMapping("/update/password")
+    @Transactional
+    public ResponseEntity<User> updateUserPassword(@RequestBody User user) {
+        User updatedUser = userService.updateUserPassword(user);
+        return ResponseEntity.ok(updatedUser);
+    }
+
 
     /**
      * Exclui um usuário pelo seu ID.
@@ -131,6 +183,55 @@ public class UsersController {
     @DeleteMapping("/delete/name/{name}")
     public ResponseEntity<Void> deleteUserByName(@PathVariable String name) {
         userService.deleteUserByName(name);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Exclui um usuário pelo seu nome e senha.
+     *
+     * @param name O nome do usuário a ser excluído.
+     * @param password A senha do usuário a ser excluído.
+     * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
+     */
+    @DeleteMapping("/delete/name/{name}/password/{password}")
+    public ResponseEntity<Void> deleteUserByNameAndPassword(@PathVariable String name, @PathVariable String password) {
+        userService.deleteUserByNameAndPassword(name, password);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Exclui um usuário pelo seu nome e email.
+     *
+     * @param name O nome do usuário a ser excluído.
+     * @param email O email do usuário a ser excluído.
+     * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
+     */
+    @DeleteMapping("/delete/name/{name}/email/{email}")
+    public ResponseEntity<Void> deleteUserByNameAndEmail(@PathVariable String name, @PathVariable String email) {
+        userService.deleteUserByNameAndEmail(name, email);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Exclui um usuário pela sua data de nascimento.
+     *
+     * @param birthDate A data de nascimento do usuário a ser excluído.
+     * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
+     */
+    @DeleteMapping("/delete/birthdate/{birthDate}")
+    public ResponseEntity<Void> deleteUserByBirthDay(@PathVariable String birthDate) {
+        userService.deleteUserByBirthDay(birthDate);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Exclui todos os usuários.
+     *
+     * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
+     */
+    @DeleteMapping("/delete/all")
+    public ResponseEntity<Void> deleteAllUsers() {
+        userService.deleteAllUsers();
         return ResponseEntity.ok().build();
     }
 }

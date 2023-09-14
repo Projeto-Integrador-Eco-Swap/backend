@@ -49,6 +49,12 @@ public interface UserService {
      */
     User updateUser(User user);
 
+    /**
+     * Atualiza o nome de um usuário existente.
+     *
+     * @param user O usuário atualizado.
+     * @return O usuário atualizado.
+     */
     User updateUserBirthDate(User user);
 
     /**
@@ -67,7 +73,7 @@ public interface UserService {
      */
     Map<String, String> deleteUserByName(String name);
 
-    
+
     /**
      * Atualiza a senha de um usuário existente.
      *
@@ -75,4 +81,64 @@ public interface UserService {
      * @return O usuário atualizado.
      */
     User updateUserPassword(User user);
+
+
+    /**
+     * Obtém um usuário pelo seu nome e senha.
+     *
+     * @param name     O nome do usuário a ser obtido.
+     * @param password A senha do usuário a ser obtido.
+     * @return O usuário com o nome e senha especificados, ou null se não encontrado.
+     */
+    User getUserByNameAndPassword(String name, String password);
+
+    /**
+     * Procura um usuário pelo nome e lança uma exceção se não for encontrado.
+     *
+     * @param name O nome do usuário a ser encontrado.
+     * @return O usuário encontrado.
+     * @throws IllegalArgumentException Se o usuário não for encontrado.
+     */
+    User getUserByNameAndEmail(String name, String email);
+
+
+    /**
+     * Obtém um usuário pelo sua  data de nascimento.
+     *
+     * @param birthDate A data de nascimento do usuário a ser obtido.
+     * @return O usuário com a data de nascimento especificada, ou null se não encontrado.
+     */
+    User getUserByBirthDay(String birthDate);
+
+    /**
+     * Exclui um usuário pelo seu nome e senha.
+     *
+     * @param name     O nome do usuário a ser excluído.
+     * @param password A senha do usuário a ser excluído.
+     * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
+     */
+    void deleteUserByNameAndPassword(String name, String password);
+
+    /**
+     * Exclui um usuário pelo seu nome e email.
+     *
+     * @param name  O nome do usuário a ser excluído.
+     * @param email O email do usuário a ser excluído.
+     * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
+     */
+    void deleteUserByNameAndEmail(String name, String email);
+
+    /**
+     * Exclui um usuário pela sua data de nascimento.
+     *
+     * @param birthDate A data de nascimento do usuário a ser excluído.
+     * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
+     */
+
+    void deleteUserByBirthDay(String birthDate);
+
+    /**
+     * Exclui todos os usuários.
+     */
+    void deleteAllUsers();
 }

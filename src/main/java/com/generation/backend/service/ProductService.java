@@ -55,4 +55,29 @@ public interface ProductService {
      * @param id O ID do produto a ser excluído.
      */
     Map<String, String> deleteProductById(Long id);
+
+    /**
+     * Exclui todos os produtos.
+     */
+    Iterable<Product> createMultipleProducts(Iterable<Product> products);
+
+    /**
+     * Atualiza o preço de um produto existente.
+     *
+     * @param product O produto atualizado.
+     * @return O produto atualizado.
+     */
+    Product updateProductPrice(Product product);
+
+    /**
+     * Exclui todos os produtos.
+     */
+    Map<String, String> deleteAllProducts();
+
+    /**
+     * Exclui um produto pelo seu nome.
+     *
+     * @param name O nome do produto a ser excluído.
+     */
+    Map<String, String> deleteProductByName(String name);
 }
