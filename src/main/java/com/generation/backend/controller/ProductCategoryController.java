@@ -1,6 +1,9 @@
 package com.generation.backend.controller;
 
 import com.generation.backend.entity.ProductCategory;
+import com.generation.backend.exception.InvalidIdProductCategoryException;
+import com.generation.backend.exception.InvalidNameProductCategoryException;
+import com.generation.backend.exception.InvalidProductCategoryException;
 import com.generation.backend.service.ProductCategoryService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -47,7 +50,7 @@ public class ProductCategoryController {
      * @return A categoria de produtos criada.
      */
     @PostMapping("/create")
-    public ResponseEntity<ProductCategory> createProductCategory(@RequestBody ProductCategory productCategory) {
+    public ResponseEntity<ProductCategory> createProductCategory(@RequestBody ProductCategory productCategory) throws InvalidNameProductCategoryException {
         ProductCategory createdProductCategory = productCategoryService.createProductCategory(productCategory);
         return ResponseEntity.status(HttpStatus.OK).body(createdProductCategory);
     }
@@ -59,7 +62,7 @@ public class ProductCategoryController {
      * @return A lista de categorias de produtos criadas.
      */
     @PostMapping("/create-multiple")
-    public ResponseEntity< Iterable<ProductCategory>> createMultipleProductCategories(@RequestBody List<ProductCategory> productCategories) {
+    public ResponseEntity< Iterable<ProductCategory>> createMultipleProductCategories(@RequestBody List<ProductCategory> productCategories) throws InvalidProductCategoryException {
         Iterable<ProductCategory> createdProductCategories = productCategoryService.createMultipleProductCategories(productCategories);
         return ResponseEntity.status(HttpStatus.OK).body(createdProductCategories);
     }
@@ -82,7 +85,7 @@ public class ProductCategoryController {
      * @return A categoria de produtos com o ID especificado.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ProductCategory> getProductCategoryById(@PathVariable Long id) {
+    public ResponseEntity<ProductCategory> getProductCategoryById(@PathVariable Long id) throws InvalidIdProductCategoryException {
         ProductCategory productCategory = productCategoryService.getProductCategoryById(id);
         return ResponseEntity.status(HttpStatus.OK).body(productCategory);
     }
@@ -107,14 +110,14 @@ public class ProductCategoryController {
      */
     @PutMapping("/update")
     @Transactional
-    public ResponseEntity<ProductCategory> updateProductCategory(@RequestBody ProductCategory productCategory) {
+    public ResponseEntity<ProductCategory> updateProductCategory(@RequestBody ProductCategory productCategory) throws InvalidIdProductCategoryException {
         ProductCategory updatedProductCategory = productCategoryService.updateProductCategory(productCategory);
         return ResponseEntity.status(200).body(updatedProductCategory);
     }
 
     @PutMapping("/update-description")
     @Transactional
-    public ResponseEntity<ProductCategory> updateProductCategoryDescription(@RequestBody ProductCategory productCategory) {
+    public ResponseEntity<ProductCategory> updateProductCategoryDescription(@RequestBody ProductCategory productCategory) throws InvalidIdProductCategoryException {
         ProductCategory updatedProductCategory = productCategoryService.updateProductCategoryDescription(productCategory);
         return ResponseEntity.status(200).body(updatedProductCategory);
     }

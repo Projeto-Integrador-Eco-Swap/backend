@@ -1,6 +1,9 @@
 package com.generation.backend.service;
 
 import com.generation.backend.entity.ProductCategory;
+import com.generation.backend.exception.InvalidIdProductCategoryException;
+import com.generation.backend.exception.InvalidNameProductCategoryException;
+import com.generation.backend.exception.InvalidProductCategoryException;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +20,7 @@ public interface ProductCategoryService {
      * @param productCategory A categoria de produtos a ser criada.
      * @return A categoria de produtos criada.
      */
-    ProductCategory createProductCategory(ProductCategory productCategory);
+    ProductCategory createProductCategory(ProductCategory productCategory) throws InvalidNameProductCategoryException;
 
     /**
      * Recupera uma categoria de produtos pelo seu identificador único (ID).
@@ -25,8 +28,7 @@ public interface ProductCategoryService {
      * @param id O ID da categoria de produtos a ser recuperada.
      * @return A categoria de produtos com o ID especificado ou nulo se não encontrada.
      */
-    ProductCategory getProductCategoryById(Long id);
-
+    ProductCategory getProductCategoryById(Long id) throws InvalidIdProductCategoryException;
 
     /**
      * Recupera uma lista de todas as categorias de produtos.
@@ -49,7 +51,7 @@ public interface ProductCategoryService {
      * @param productCategory A categoria de produtos atualizada.
      * @return A categoria de produtos atualizada.
      */
-    ProductCategory updateProductCategory(ProductCategory productCategory);
+    ProductCategory updateProductCategory(ProductCategory productCategory) throws InvalidIdProductCategoryException;
 
     /**
      * Exclui uma categoria de produtos pelo seu identificador único (ID).
@@ -73,7 +75,7 @@ public interface ProductCategoryService {
      * @param productCategories A lista de categorias de produtos a ser criada.
      * @return A lista de categorias de produtos criada.
      */
-    Iterable<ProductCategory> createMultipleProductCategories(List<ProductCategory> productCategories);
+    Iterable<ProductCategory> createMultipleProductCategories(List<ProductCategory> productCategories) throws InvalidProductCategoryException;
 
     /**
      * Exclui todas as categorias de produtos.
@@ -88,5 +90,5 @@ public interface ProductCategoryService {
      * @param productCategory A categoria de produtos atualizada.
      * @return A categoria de produtos atualizada.
      */
-    ProductCategory updateProductCategoryDescription(ProductCategory productCategory);
+    ProductCategory updateProductCategoryDescription(ProductCategory productCategory) throws InvalidIdProductCategoryException;
 }
