@@ -45,4 +45,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     @Query("SELECT u FROM users u WHERE u.birthDate = :birthDate")
     User findByBirthDate(@Param("birthDate") LocalDate birthDate);
+    
+    User findByEmail(@Param("email") String email);
 }
