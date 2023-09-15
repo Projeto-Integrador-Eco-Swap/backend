@@ -19,7 +19,12 @@ application.properties
 *.iws
 *.iml
 *.ipr
-*.mvn
+.mvn
+mvnw.cmd
+mvnw
+!**/src/main/**/mvnw.cmd
+!**/src/test/**/mvnw.cmd
+
 
 ### NetBeans ###
 /nbproject/private/
