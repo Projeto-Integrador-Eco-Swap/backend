@@ -6,7 +6,10 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -14,58 +17,70 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity(name = "order")
-@Table(name = "tb_Order",
-        schema = "db_ecoswap",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        columnNames = "name",
-                        name = "unique_name"
-                )
-        })
+@Table
+        (
+                name = "tb_Order",
+                schema = "db_ecoswap"
+        )
 public class Order {
 
     @Id
-    @GeneratedValue (
+    @GeneratedValue(
             strategy = GenerationType.IDENTITY,
             generator = "order_sequence"
     )
-    @Column(name = "id",
-            nullable = false,
-            columnDefinition = "BIGINT UNSIGNED")
     @EqualsAndHashCode.Include
+    @Column(name = "order_id",
+            columnDefinition = "BIGINT UNSIGNED")
     private Long id;
 
-    @Column(name = "name",
+    @Column(name = "order_tracking_number",
             nullable = false,
-            columnDefinition = "VARCHAR(255)")
-    private String name;
+            columnDefinition = "VARCHAR(50)")
+    private String orderTrackingNumber;
 
-    @Column(name = "description",
+    @Column(name = "total_quantity",
             nullable = false,
-            columnDefinition = "varchar(300)")
-    private String description;
+            columnDefinition = "INT default 0")
+    private int totalQuantity;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id",
+    @Column(name = "total_price",
             nullable = false,
-            columnDefinition = "BIGINT UNSIGNED",
-            foreignKey = @ForeignKey(name = "fk_user"))
-    private User user;
+            columnDefinition = "DECIMAL(15,2) default 0.0")
+    private BigDecimal totalPrice;
 
-//    @Column(name = "is_activated",
-//            nullable = false,
-//            columnDefinition = "BOOLEAN DEFAULT TRUE")
-//    private boolean isActivated;
-//
-//    @CreationTimestamp
-//    @Column(name = "data_created",
-//            nullable = false,
-//            columnDefinition = "TIMESTAMP")
-//    private LocalDateTime dataCreated;
-//
-//    @UpdateTimestamp
-//    @Column(name = "last_updated",
-//            nullable = false,
-//            columnDefinition = "TIMESTAMP")
-//    private LocalDateTime lastUpdated;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_status",
+            nullable = false,
+            columnDefinition = "VARCHAR(15) default 'NEW'")
+    private OrderStatus orderStatus;
+
+    @CreationTimestamp
+    @Column(name = "date_created",
+            nullable = false,
+            columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
+    private LocalDateTime dateCreated;
+
+    @UpdateTimestamp
+    @Column(name = "last_updated",
+            nullable = false,
+            columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
+    private LocalDateTime lastUpdated;
+
+    @OneToMany(mappedBy = "order") // Verifique se "order" corresponde à propriedade na classe OrderItem
+    private Set<OrderItem> items = new HashSet<>();
+
+    @Column(name = "id_card",
+            nullable = false,
+            columnDefinition = "BIGINT UNSIGNED")
+    private Long idCard;
+
+    public BigDecimal getTotalOrderPrice() {
+        BigDecimal amount = BigDecimal.ZERO;
+        Set<OrderItem> itemPedidos = getItems();
+        for (OrderItem itemPedido : itemPedidos) {
+            amount = amount.add(itemPedido.getProduct().getPrice().multiply(new BigDecimal(itemPedido.getQuantity())));
+        }
+        return amount;
+    }
 }
