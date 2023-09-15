@@ -29,7 +29,8 @@ public class PhoneValidator implements ConstraintValidator<Phone, String> {
             PADRAO_GERAL_COM_DDD,
             PADRAO_DDD_9_DIGITOS,
             PADRAO_DDD_9_DIGITOS_SEPARADOR_OPCIONAL,
-            PADRAO_INTERNACIONAL);
+            PADRAO_INTERNACIONAL
+    );
 
     private static final Pattern PHONE_PATTERN = Pattern.compile(PHONE_REGEX, Pattern.UNICODE_CHARACTER_CLASS);
 
