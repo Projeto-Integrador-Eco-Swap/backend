@@ -1,11 +1,13 @@
 package com.generation.backend.service.implementation;
 
 import com.generation.backend.entity.Product;
+import com.generation.backend.entity.ProductCategory;
 import com.generation.backend.repository.ProductRepository;
 import com.generation.backend.service.ProductService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -97,7 +99,7 @@ public class ProductServiceImpl implements ProductService {
 
         existingProduct.setName(product.getName());
         existingProduct.setPrice(product.getPrice());
-        existingProduct.setUrl(product.getUrl());
+        existingProduct.setImage(product.getImage());
         existingProduct.setActivated(product.isActivated());
         existingProduct.setCategory(product.getCategory());
 
@@ -176,6 +178,41 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
+     * Obtém uma lista de produtos pertencentes a uma categoria específica com base no ID da categoria.
+     *
+     * @param category@return Uma lista de produtos que pertencem à categoria especificada.
+     */
+    @Override
+    public List<Product> getProductsByCategory(ProductCategory category) {
+        return productRepository.findByCategory(category);
+    }
+
+
+    /**
+     * Obtém uma lista de produtos com base no status de ativação.
+     *
+     * @param isActivated O valor booleano que indica se os produtos estão ativados (true) ou desativados (false).
+     * @return Uma lista de produtos com base no status de ativação especificado.
+     */
+    @Override
+    public List<Product> getProductsByActivation(Boolean isActivated) {
+        return productRepository.findProductsByActivation(isActivated);
+    }
+
+    /**
+     * Obtém uma lista de produtos com preços dentro da faixa especificada.
+     *
+     * @param minPrice O preço mínimo dos produtos a serem incluídos na lista (opcional).
+     * @param maxPrice O preço máximo dos produtos a serem incluídos na lista (opcional).
+     * @return Uma lista de produtos com preços dentro da faixa especificada.
+     */
+    @Override
+    public List<Product> getProductsByPriceRange(BigDecimal minPrice, BigDecimal maxPrice) {
+        return productRepository.findProductsByPriceRange(minPrice, maxPrice);
+
+    }
+
+    /**
      * Valida se um produto é válido para criação.
      *
      * @param product O produto a ser validado.
@@ -194,7 +231,7 @@ public class ProductServiceImpl implements ProductService {
             throw new IllegalArgumentException("Product to be created must have a price.");
         }
 
-        if (product.getUrl() == null || product.getUrl().isEmpty()) {
+        if (product.getImage() == null || product.getImage().isEmpty()) {
             throw new IllegalArgumentException("Product to be created must have an URL.");
         }
 

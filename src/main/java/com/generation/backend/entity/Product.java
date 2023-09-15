@@ -58,7 +58,7 @@ public class Product {
     @Column(name = "image",
             nullable = false,
             columnDefinition = "VARCHAR(5000)")
-    private String Url;
+    private String image;
 
     @Column(name = "is_activated",
             nullable = false,
@@ -79,8 +79,26 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "productcategory_id",
-            nullable = false,
             columnDefinition = "BIGINT UNSIGNED",
             foreignKey = @ForeignKey(name = "fk_product_category"))
     private ProductCategory category;
+
+    @Override
+    public String toString() {
+        return "{\n" +
+                "\t\"id\": " + id + ",\n" +
+                "\t\"name\": \"" + name + "\",\n" +
+                "\t\"price\": " + price + ",\n" +
+                "\t\"image\": \"" + image + "\",\n" +
+                "\t\"isActivated\": " + isActivated + ",\n" +
+                "\t\"dataCreated\": \"" + dataCreated + "\",\n" +
+                "\t\"lastUpdated\": \"" + lastUpdated + "\",\n" +
+                "\t\"category\": {\n" +
+                "\t\t\"id\": " + category.getId() + ",\n" +
+                "\t\t\"name\": \"" + category.getName() + "\",\n" +
+                "\t\t\"description\": \"" + category.getDescription() + "\",\n" +
+                "\t\t\"material\": \"" + category.getMaterial() + "\"\n" +
+                "\t}\n" +
+                "}";
+    }
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -83,4 +84,31 @@ public class Order {
         }
         return amount;
     }
+
+    @Override
+    public String toString() {
+        return "{\n" +
+                "\t\"id\": " + id + ",\n" +
+                "\t\"orderTrackingNumber\": \"" + orderTrackingNumber + "\",\n" +
+                "\t\"totalQuantity\": " + totalQuantity + ",\n" +
+                "\t\"totalPrice\": " + totalPrice + ",\n" +
+                "\t\"orderStatus\": \"" + orderStatus + "\",\n" +
+                "\t\"dateCreated\": \"" + dateCreated + "\",\n" +
+                "\t\"lastUpdated\": \"" + lastUpdated + "\",\n" +
+                "\t\"items\": [\n" + getOrderItemsAsString() + "\n\t],\n" +
+                "\t\"idCard\": " + idCard + "\n" +
+                "}";
+    }
+
+    private @NotNull String getOrderItemsAsString() {
+        StringBuilder itemsString = new StringBuilder();
+        for (OrderItem item : items) {
+            itemsString.append(item.toString()).append(",\n");
+        }
+        if (itemsString.length() > 0) {
+            itemsString.deleteCharAt(itemsString.length() - 1); // Remove a vírgula extra no final
+        }
+        return itemsString.toString();
+    }
+
 }

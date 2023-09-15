@@ -159,4 +159,51 @@ public class ProductCategoryController {
         Map<String, String> response = productCategoryService.deleteProductCategoryByName(name);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    /**
+     * Pesquisa categorias de produtos por descrição.
+     *
+     * @param description A descrição a ser usada na pesquisa.
+     * @return Uma lista de categorias cuja descrição contenha o texto especificado.
+     */
+    @GetMapping("/search-description/{description}")
+    public ResponseEntity<List<ProductCategory>> searchProductCategoriesByDescription(@PathVariable String description) {
+        List<ProductCategory> productCategories = productCategoryService.searchProductCategoriesByDescription(description);
+        return ResponseEntity.status(HttpStatus.OK).body(productCategories);
+    }
+
+    /**
+     * Retorna uma lista de categorias de produtos ordenadas por nome.
+     *
+     * @return Uma lista de categorias de produtos em ordem alfabética de nome.
+     */
+    @GetMapping("/sort-by-name")
+    public ResponseEntity<List<ProductCategory>> getProductCategoriesSortedByName() {
+        List<ProductCategory> sortedCategories = productCategoryService.getProductCategoriesSortedByName();
+        return ResponseEntity.status(HttpStatus.OK).body(sortedCategories);
+    }
+
+    /**
+     * Lista categorias de produtos por material.
+     *
+     * @param material O material a ser usado na filtragem.
+     * @return Uma lista de categorias cujo material corresponda ao especificado.
+     */
+    @GetMapping("/material/{material}")
+    public ResponseEntity<List<ProductCategory>> getProductCategoriesByMaterial(@PathVariable String material) {
+        List<ProductCategory> categoriesByMaterial = productCategoryService.getProductCategoriesByMaterial(material);
+        return ResponseEntity.status(HttpStatus.OK).body(categoriesByMaterial);
+    }
+
+    /**
+     * Lista categorias de produtos por descrição exata.
+     *
+     * @param description A descrição exata a ser usada na filtragem.
+     * @return Uma lista de categorias cuja descrição corresponda exatamente à especificada.
+     */
+    @GetMapping("/description-exact/{description}")
+    public ResponseEntity<List<ProductCategory>> getProductCategoriesByExactDescription(@PathVariable String description) {
+        List<ProductCategory> categoriesByExactDescription = productCategoryService.getProductCategoriesByExactDescription(description);
+        return ResponseEntity.status(HttpStatus.OK).body(categoriesByExactDescription);
+    }
 }

@@ -10,41 +10,44 @@ import java.time.LocalDate;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
+    
     /**
      * Obtém um usuário pelo seu nome.
      *
      * @param name O nome do usuário a ser obtido.
      * @return O usuário com o nome especificado, ou null se não encontrado.
      */
-    User findByName(@Param("name") String name);
+    @Query("SELECT u FROM users AS u " +
+            "WHERE u.firstName = :name")
+    User findByFirstName(String name);
 
     /**
-     * Obtém um usuário pelo seu nome e senha.
+     * Obtém um usuário pelo seu sobrenome.
      *
-     * @param name O nome do usuário a ser obtido.
-     * @param password A senha do usuário a ser obtido.
-     * @return O usuário com o nome e senha especificados, ou null se não encontrado.
+     * @param lastName O sobrenome do usuário a ser obtido.
+     * @return O usuário com o sobrenome especificado, ou null se não encontrado.
      */
-    User findByNameAndPassword(@Param("name") String name,@Param("password") String password);
-
-    /**
-     * Obtém um usuário pelo seu nome e email.
-     *
-     * @param name O nome do usuário a ser obtido.
-     * @param email O email do usuário a ser obtido.
-     * @return O usuário com o nome e email especificados, ou null se não encontrado.
-     */
-    User findByNameAndEmail(String name, String email);
-
+    @Query("SELECT u FROM users AS u " +
+            "WHERE u.lastName = :lastName")
+    User findUserByLastName(String lastName);
+    
     /**
      * Obtém um usuário pela sua data de nascimento.
      *
      * @param birthDate A data de nascimento do usuário a ser obtido.
      * @return O usuário com a data de nascimento especificada, ou null se não encontrado.
      */
-    @Query("SELECT u FROM users u WHERE u.birthDate = :birthDate")
+    @Query("SELECT u FROM users AS u " +
+            "WHERE u.birthDate = :birthDate")
     User findByBirthDate(@Param("birthDate") LocalDate birthDate);
-    
+
+    /**
+     * Obtém um usuário pelo seu email.
+     *
+     * @param email O email do usuário a ser obtido.
+     * @return O usuário com o email especificado, ou null se não encontrado.
+     */
+    @Query("SELECT u FROM users AS u " +
+            "WHERE u.email = :email")
     User findByEmail(@Param("email") String email);
 }

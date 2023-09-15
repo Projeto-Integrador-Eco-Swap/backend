@@ -57,4 +57,17 @@ public class OrderItem {
             referencedColumnName = "order_id",
             foreignKey = @ForeignKey(name = "fk_order_item_order"))
     private Order order;
+
+    @Override
+    public String toString() {
+        return "{\n" +
+                "\t\"id\": " + id + ",\n" +
+                "\t\"imageUrl\": \"" + imageUrl + "\",\n" +
+                "\t\"price\": " + price + ",\n" +
+                "\t\"quantity\": " + quantity + ",\n" +
+                "\t\"product\": " + (product != null ? product.toString() : "null") + ",\n" +
+                "\t\"order\": " + (order != null ? order.toString() : "null") + "\n" +
+                "}";
+    }
+
 }

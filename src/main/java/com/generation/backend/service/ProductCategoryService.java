@@ -4,6 +4,8 @@ import com.generation.backend.entity.ProductCategory;
 import com.generation.backend.exception.InvalidIdProductCategoryException;
 import com.generation.backend.exception.InvalidNameProductCategoryException;
 import com.generation.backend.exception.InvalidProductCategoryException;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -91,4 +93,39 @@ public interface ProductCategoryService {
      * @return A categoria de produtos atualizada.
      */
     ProductCategory updateProductCategoryDescription(ProductCategory productCategory) throws InvalidIdProductCategoryException;
+
+    /**
+     * Realiza uma pesquisa de categorias de produtos com base em uma descrição parcial, ignorando maiúsculas e minúsculas.
+     *
+     * @param description A descrição parcial pela qual as categorias serão filtradas.
+     * @return Uma lista de categorias de produtos correspondentes à descrição parcial especificada.
+     */
+    @Query("SELECT pc FROM productcategory pc WHERE LOWER(pc.description) LIKE %:description%")
+    List<ProductCategory> searchProductCategoriesByDescription(@Param("description") String description);
+
+    /**
+     * Retorna uma lista de categorias de produtos ordenadas pelo nome.
+     *
+     * @return Uma lista de categorias de produtos ordenadas alfabeticamente pelo nome.
+     */
+    @Query("SELECT pc FROM productcategory pc ORDER BY pc.name")
+    List<ProductCategory> getProductCategoriesSortedByName();
+
+    /**
+     * Retorna uma lista de categorias de produtos com base em um material específico, ignorando maiúsculas e minúsculas.
+     *
+     * @param material O material pelo qual as categorias serão filtradas.
+     * @return Uma lista de categorias de produtos correspondentes ao material especificado.
+     */
+    @Query("SELECT pc FROM productcategory pc WHERE LOWER(pc.material) = LOWER(:material)")
+    List<ProductCategory> getProductCategoriesByMaterial(@Param("material") String material);
+
+    /**
+     * Retorna uma lista de categorias de produtos com base em uma descrição exata.
+     *
+     * @param description A descrição exata pela qual as categorias serão filtradas.
+     * @return Uma lista de categorias de produtos correspondentes à descrição exata especificada.
+     */
+    @Query("SELECT pc FROM productcategory pc WHERE pc.description = :description")
+    List<ProductCategory> getProductCategoriesByExactDescription(@Param("description") String description);
 }

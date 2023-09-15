@@ -1,7 +1,9 @@
 package com.generation.backend.service;
 
 import com.generation.backend.entity.Product;
+import com.generation.backend.entity.ProductCategory;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -80,4 +82,30 @@ public interface ProductService {
      * @param name O nome do produto a ser excluído.
      */
     Map<String, String> deleteProductByName(String name);
+
+    /**
+     * Obtém uma lista de produtos pertencentes a uma categoria específica com base no objeto de categoria.
+     *
+     * @param category O objeto de categoria pela qual os produtos serão filtrados.
+     * @return Uma lista de produtos que pertencem à categoria especificada.
+     */
+    List<Product> getProductsByCategory(ProductCategory category);
+
+
+    /**
+     * Obtém uma lista de produtos com base no status de ativação.
+     *
+     * @param isActivated O valor booleano que indica se os produtos estão ativados (true) ou desativados (false).
+     * @return Uma lista de produtos com base no status de ativação especificado.
+     */
+    List<Product> getProductsByActivation(Boolean isActivated);
+
+    /**
+     * Obtém uma lista de produtos com preços dentro da faixa especificada.
+     *
+     * @param minPrice O preço mínimo dos produtos a serem incluídos na lista (opcional).
+     * @param maxPrice O preço máximo dos produtos a serem incluídos na lista (opcional).
+     * @return Uma lista de produtos com preços dentro da faixa especificada.
+     */
+    List<Product> getProductsByPriceRange(BigDecimal minPrice, BigDecimal maxPrice);
 }

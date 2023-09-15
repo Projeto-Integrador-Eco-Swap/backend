@@ -14,8 +14,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity(name = "users")
-@Table(name = "tb_Users",
-        schema = "db_ecoswap",
+@Table(name = "tb_users",
+        schema = "db_ecoSwap",
         uniqueConstraints = {
                 @UniqueConstraint(
                         columnNames = "email",
@@ -29,16 +29,21 @@ public class User {
             strategy = GenerationType.IDENTITY,
             generator = "users_sequence"
     )
-    @Column(name = "id",
+    @Column(name = "user_id",
             nullable = false,
             columnDefinition = "BIGINT UNSIGNED")
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "name",
+    @Column(name = "first_name",
             nullable = false,
             columnDefinition = "VARCHAR(255)")
-    private String name;
+    private String firstName;
+
+    @Column(name = "last_name",
+            nullable = false,
+            columnDefinition = "VARCHAR(255)")
+    private String lastName;
 
     @Email
     @Column(name = "email",
@@ -66,4 +71,17 @@ public class User {
     @Column(name = "picture",
             columnDefinition = "VARCHAR(5000)")
     private String picture;
+
+    @Override
+    public String toString() {
+        return "{\n" +
+                "\t\"id\": " + id + ",\n" +
+                "\t\"name\": \"" + firstName + "\",\n" +
+                "\t\"email\": \"" + email + "\",\n" +
+                "\t\"password\": \"" + password + "\",\n" +
+                "\t\"phone\": \"" + phone + "\",\n" +
+                "\t\"birthDate\": \"" + birthDate + "\",\n" +
+                "\t\"picture\": \"" + picture + "\"\n" +
+                "}";
+    }
 }

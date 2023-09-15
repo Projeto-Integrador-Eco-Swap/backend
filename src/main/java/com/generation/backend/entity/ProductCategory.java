@@ -1,11 +1,7 @@
 package com.generation.backend.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * Represents a product category.
@@ -51,4 +47,16 @@ public class ProductCategory {
             nullable = false,
             columnDefinition = "varchar(255)")
     private String material;
+
+    @Override
+    public String toString() {
+        return "{\n" +
+                "\t\"id\": " + id + ",\n" +
+                "\t\"name\": \"" + name + "\",\n" +
+                "\t\"description\": \"" + description + "\",\n" +
+                "\t\"material\": \"" + material + "\"\n" +
+                "}";
+    }
+
+
 }
