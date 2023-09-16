@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -63,8 +64,8 @@ public class ProductCategoryControllerTest {
         ResponseEntity<Iterable<ProductCategory>> response = controller.createMultipleProductCategories(categories);
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(categories, response.getBody());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(categories, response.getBody());
     }
 
     /**
@@ -85,8 +86,8 @@ public class ProductCategoryControllerTest {
         ResponseEntity<ProductCategory> response = controller.updateProductCategory(category);
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(category, response.getBody());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(category, response.getBody());
     }
 
     /**
@@ -107,8 +108,8 @@ public class ProductCategoryControllerTest {
         ResponseEntity<ProductCategory> response = controller.updateProductCategoryDescription(category);
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(category, response.getBody());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(category, response.getBody());
     }
 
     /**
@@ -129,8 +130,8 @@ public class ProductCategoryControllerTest {
         ResponseEntity<Map<String, String>> response = controller.deleteProductCategory(categoryId);
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(responseMap, response.getBody());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(responseMap, response.getBody());
     }
 
     /**
@@ -148,8 +149,8 @@ public class ProductCategoryControllerTest {
         ResponseEntity<Map<String, String>> response = controller.deleteAllProductCategories();
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(responseMap, response.getBody());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(responseMap, response.getBody());
     }
 
     /**
@@ -170,8 +171,8 @@ public class ProductCategoryControllerTest {
         ResponseEntity<Map<String, String>> response = controller.deleteProductCategoryByName(categoryName);
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(responseMap, response.getBody());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(responseMap, response.getBody());
     }
 
     /**
@@ -193,8 +194,8 @@ public class ProductCategoryControllerTest {
         ResponseEntity<ProductCategory> response = controller.getProductCategoryById(categoryId);
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode()); // Verifica se o status da resposta é OK (200)
-        assertEquals(category, response.getBody()); // Verifica se o corpo da resposta contém a categoria simulada
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode()); // Verifica se o status da resposta é OK (200)
+        Assertions.assertEquals(category, response.getBody()); // Verifica se o corpo da resposta contém a categoria simulada
     }
 
 
@@ -215,8 +216,8 @@ public class ProductCategoryControllerTest {
         ResponseEntity<ProductCategory> response = controller.getProductCategoryByName(categoryName);
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode()); // Verifica se o status da resposta é OK (200)
-        assertEquals(category, response.getBody()); // Verifica se o corpo da resposta contém a categoria simulada
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode()); // Verifica se o status da resposta é OK (200)
+        Assertions.assertEquals(category, response.getBody()); // Verifica se o corpo da resposta contém a categoria simulada
     }
 
 
@@ -241,8 +242,8 @@ public class ProductCategoryControllerTest {
         ResponseEntity<List<ProductCategory>> response = controller.searchProductCategoriesByDescription(description);
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode()); // Verifica se o status da resposta é OK (200)
-        assertEquals(categories, response.getBody()); // Verifica se o corpo da resposta contém a lista de categorias simulada
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode()); // Verifica se o status da resposta é OK (200)
+        Assertions.assertEquals(categories, response.getBody()); // Verifica se o corpo da resposta contém a lista de categorias simulada
     }
 
     /**
@@ -263,8 +264,8 @@ public class ProductCategoryControllerTest {
         ResponseEntity<List<ProductCategory>> response = controller.getProductCategoriesSortedByName();
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode()); // Verifica se o status da resposta é OK (200)
-        assertEquals(categories, response.getBody()); // Verifica se o corpo da resposta contém a lista de categorias simulada
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode()); // Verifica se o status da resposta é OK (200)
+        Assertions.assertEquals(categories, response.getBody()); // Verifica se o corpo da resposta contém a lista de categorias simulada
     }
 
 
@@ -289,8 +290,8 @@ public class ProductCategoryControllerTest {
         ResponseEntity<List<ProductCategory>> response = controller.getProductCategoriesByMaterial(material);
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode()); // Verifica se o status da resposta é OK (200)
-        assertEquals(categories, response.getBody()); // Verifica se o corpo da resposta contém a lista de categorias simulada
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode()); // Verifica se o status da resposta é OK (200)
+        Assertions.assertEquals(categories, response.getBody()); // Verifica se o corpo da resposta contém a lista de categorias simulada
     }
 
 
@@ -315,7 +316,7 @@ public class ProductCategoryControllerTest {
         ResponseEntity<List<ProductCategory>> response = controller.getProductCategoriesByExactDescription(description);
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode()); // Verifica se o status da resposta é OK (200)
-        assertEquals(categories, response.getBody()); // Verifica se o corpo da resposta contém a lista de categorias simulada
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode()); // Verifica se o status da resposta é OK (200)
+        Assertions.assertEquals(categories, response.getBody()); // Verifica se o corpo da resposta contém a lista de categorias simulada
     }
 }

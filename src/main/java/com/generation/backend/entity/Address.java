@@ -2,18 +2,23 @@ package com.generation.backend.entity;
 
 import com.generation.backend.annotation.CEP;
 import com.generation.backend.annotation.UF;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.proxy.HibernateProxy;
-
-import java.util.Objects;
+import lombok.Builder;
 
 /**
  * Classe que representa uma entidade de endereço.
  */
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,12 +26,17 @@ import java.util.Objects;
 @Entity(name = "address")
 @Table(name = "tb_address",
         schema = "db_ecoSwap")
+@Builder
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY,
+            generator = "address_sequence"
+    )
     @Column(name = "id_address",
             columnDefinition = "bigint unsigned")
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(name = "cep",
@@ -100,33 +110,5 @@ public class Address {
                 ", siafi='" + siafi + '\'' +
                 ", complemento='" + complemento + '\'' +
                 '}';
-    }
-
-    /**
-     * Verifica se dois objetos Address são iguais com base no ID.
-     *
-     * @param o O objeto a ser comparado.
-     * @return True se os objetos são iguais, false caso contrário.
-     */
-    @Override
-    public final boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) return false;
-        Address address = (Address) o;
-        return this.getId() != null &&
-                Objects.equals(this.getId(), address.getId());
-    }
-
-    /**
-     * Calcula o código de hash do objeto Address.
-     *
-     * @return O código de hash do objeto.
-     */
-    @Override
-    public final int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

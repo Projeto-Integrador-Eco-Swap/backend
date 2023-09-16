@@ -1,5 +1,6 @@
 package com.generation.backend.exception;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -24,7 +25,7 @@ public class InvalidProductCategoryExceptionTest {
                     throw new InvalidIdProductCategoryException(expectedErrorMessage);
                 }
         );
-        assertEquals(expectedErrorMessage, exception.getMessage());
+        Assertions.assertEquals(expectedErrorMessage, exception.getMessage());
     }
 
     /**
@@ -44,6 +45,6 @@ public class InvalidProductCategoryExceptionTest {
         );
 
         // Verifica se a mensagem padrão é igual à mensagem esperada
-        assertEquals("Invalid product category ID", exception.getMessage());
+        Assertions.assertEquals("Invalid product category ID", exception.getMessage());
     }
 }

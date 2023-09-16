@@ -1,5 +1,6 @@
-package com.generation.backend.annotation;
+package com.generation.backend.annotation.validator;
 
+import com.generation.backend.annotation.UF;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.executable.ValidateOnExecution;

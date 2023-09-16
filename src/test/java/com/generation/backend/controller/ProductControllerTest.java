@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -95,7 +93,6 @@ public class ProductControllerTest {
             Assertions.assertTrue(isProductInList(product, createdProducts));
         }
     }
-
 
     /**
      * Testa o método "getAllProducts" do controlador de produtos.
@@ -200,17 +197,65 @@ public class ProductControllerTest {
 
     @Test
     void getProductByNameTest() {
-        // Implemente este teste para o método "getProductByName".
+        // Crie um nome de produto simulado para o teste
+        String productName = "Produto de Teste";
+
+        // Crie um produto simulado com o nome especificado
+        Product simulatedProduct = createMockProduct(productName);
+
+        // Simule o comportamento do serviço para retornar o produto simulado pelo nome
+        when(service.getProductByName(productName)).thenReturn(simulatedProduct);
+
+        // Chame o método do controlador que você deseja testar
+        ResponseEntity<Product> response = controller.getProductByName(productName);
+
+        // Verifique se a resposta está correta
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        // Verifique se o produto na resposta corresponde ao produto simulado
+        Product retrievedProduct = response.getBody();
+        assert retrievedProduct != null;
+        Assertions.assertEquals(simulatedProduct, retrievedProduct);
     }
 
     @Test
     void updateProductTest() {
-        // Implemente este teste para o método "updateProduct".
+        // Crie um produto simulado para o teste
+        Product productToUpdate = createMockProduct("Produto de Teste");
+
+        // Simule o comportamento do serviço para retornar o produto atualizado
+        when(service.updateProduct(productToUpdate)).thenReturn(productToUpdate);
+
+        // Chame o método do controlador que você deseja testar
+        ResponseEntity<Product> response = controller.updateProduct(productToUpdate);
+
+        // Verifique se a resposta está correta
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        // Verifique se o produto na resposta corresponde ao produto simulado
+        Product updatedProduct = response.getBody();
+        assert updatedProduct != null;
+        Assertions.assertEquals(productToUpdate, updatedProduct);
     }
 
     @Test
     void updateProductPriceTest() {
-        // Implemente este teste para o método "updateProductPrice".
+        // Crie um produto simulado para o teste
+        Product productToUpdate = createMockProduct("Produto de Teste");
+
+        // Simule o comportamento do serviço para retornar o produto atualizado com o preço
+        when(service.updateProductPrice(productToUpdate)).thenReturn(productToUpdate);
+
+        // Chame o método do controlador que você deseja testar
+        ResponseEntity<Product> response = controller.updateProductPrice(productToUpdate);
+
+        // Verifique se a resposta está correta
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        // Verifique se o produto na resposta corresponde ao produto simulado
+        Product updatedProduct = response.getBody();
+        assert updatedProduct != null;
+        Assertions.assertEquals(productToUpdate, updatedProduct);
     }
 
     /**
@@ -228,7 +273,7 @@ public class ProductControllerTest {
         ResponseEntity<?> response = controller.deleteProductById(productId);
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     /**
@@ -243,9 +288,9 @@ public class ProductControllerTest {
         ResponseEntity<Map<String, String>> response = controller.deleteAllProducts();
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(Objects.requireNonNull(response.getBody()).containsKey("message"));
-        assertEquals("Todos os produtos foram excluídos com sucesso.", response.getBody().get("message"));
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(Objects.requireNonNull(response.getBody()).containsKey("message"));
+        Assertions.assertEquals("Todos os produtos foram excluídos com sucesso.", response.getBody().get("message"));
     }
 
     /**
@@ -263,9 +308,9 @@ public class ProductControllerTest {
         ResponseEntity<Map<String, String>> response = controller.deleteProductByName(productName);
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(Objects.requireNonNull(response.getBody()).containsKey("message"));
-        assertEquals("Produto excluído com sucesso.", response.getBody().get("message"));
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(Objects.requireNonNull(response.getBody()).containsKey("message"));
+        Assertions.assertEquals("Produto excluído com sucesso.", response.getBody().get("message"));
     }
 
 
@@ -291,17 +336,17 @@ public class ProductControllerTest {
         ResponseEntity<List<Product>> response = controller.getProductsByCategory(category);
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         // Verifique se a lista de produtos na resposta corresponde à lista de produtos simulados
         List<Product> retrievedProducts = response.getBody();
         assert retrievedProducts != null;
-        assertNotNull(retrievedProducts);
-        assertEquals(products.size(), retrievedProducts.size());
+        Assertions.assertNotNull(retrievedProducts);
+        Assertions.assertEquals(products.size(), retrievedProducts.size());
 
         // Verifique se todos os produtos na lista pertencem à categoria especificada
         for (Product product : retrievedProducts) {
-            assertEquals(category, product.getCategory());
+            Assertions.assertEquals(category, product.getCategory());
         }
     }
 
@@ -342,17 +387,17 @@ public class ProductControllerTest {
         ResponseEntity<List<Product>> response = controller.getProductsByActivation(isActivated);
 
         // Verifique se a resposta está correta
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         // Verifique se a lista de produtos na resposta corresponde à lista de produtos simulados
         List<Product> retrievedProducts = response.getBody();
         assert retrievedProducts != null;
-        assertNotNull(retrievedProducts);
-        assertEquals(products.size(), retrievedProducts.size());
+        Assertions.assertNotNull(retrievedProducts);
+        Assertions.assertEquals(products.size(), retrievedProducts.size());
 
         // Verifique se todos os produtos na lista estão ativados
         for (Product product : retrievedProducts) {
-            assertTrue(product.isActivated());
+            Assertions.assertTrue(product.isActivated());
         }
     }
 }

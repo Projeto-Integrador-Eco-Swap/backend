@@ -3,6 +3,7 @@ package com.generation.backend.repository;
 import com.generation.backend.entity.ProductCategory;
 import jakarta.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class ProductCategoryRepositoryTest {
      * Testa o método `save` do repositório, que salva um objeto ProductCategory individualmente.
      */
     @Test
-    public void saveMethod() {
+    void saveMethod() {
         ProductCategory productCategory = new ProductCategory();
         productCategory.setName("Test1");
         productCategory.setDescription("Test2");
@@ -49,7 +50,7 @@ public class ProductCategoryRepositoryTest {
      * Testa o método `saveAll` do repositório, que salva uma lista de objetos ProductCategory.
      */
     @Test
-    public void saveAllMethod() {
+    void saveAllMethod() {
         ProductCategory productCategory1 = new ProductCategory();
         ProductCategory productCategory2 = new ProductCategory();
         ProductCategory productCategory3 = new ProductCategory();
@@ -75,13 +76,13 @@ public class ProductCategoryRepositoryTest {
         System.out.println(productCategory3);
         System.out.println("--------------------------------------------------");
     }
-    
+
     /**
      * Testa o método `findAll` do repositório, que busca todos os objetos ProductCategory.
      */
     @Test
     @DisplayName("Teste de findAll")
-    public void findAllMethod() {
+    void findAllMethod() {
         List<ProductCategory> productCategoryList = productCategoryRepository.findAll();
 
         System.out.println("[");
@@ -100,7 +101,7 @@ public class ProductCategoryRepositoryTest {
     /**
      * Converte um objeto ProductCategory em uma representação JSON.
      */
-    private @NotNull String toJson(@NotNull ProductCategory productCategory) {
+    @NotNull String toJson(@NotNull ProductCategory productCategory) {
         StringBuilder jsonBuilder = new StringBuilder();
         jsonBuilder.append("{\n");
         jsonBuilder.append("\t\"id\": ").append(productCategory.getId()).append(",\n");
@@ -116,7 +117,7 @@ public class ProductCategoryRepositoryTest {
      * Testa o método `findById` do repositório, que busca um objeto ProductCategory por ID.
      */
     @Test
-    public void findByIdMethod() {
+    void findByIdMethod() {
         ProductCategory productCategory = productCategoryRepository.findById(1L).orElse(null);
 
         System.out.println(productCategory);
@@ -127,7 +128,7 @@ public class ProductCategoryRepositoryTest {
      */
     @Test
     @Transactional
-    public void updateMethod() {
+    void updateMethod() {
         ProductCategory productCategory = productCategoryRepository.findById(1L).orElse(null);
 
         assert productCategory != null;
@@ -144,7 +145,7 @@ public class ProductCategoryRepositoryTest {
      * Testa o método `findByName` do repositório, que busca um objeto ProductCategory pelo nome.
      */
     @Test
-    public void findByNameMethod() {
+    void findByNameMethod() {
         ProductCategory productCategory = productCategoryRepository.findByName("Test13");
 
         System.out.println(productCategory);
@@ -154,7 +155,7 @@ public class ProductCategoryRepositoryTest {
      * Testa o método `count` do repositório, que conta o número de objetos ProductCategory no repositório.
      */
     @Test
-    public void countMethod() {
+    void countMethod() {
         System.out.println(productCategoryRepository.count());
     }
 
@@ -162,7 +163,7 @@ public class ProductCategoryRepositoryTest {
      * Testa o método `deleteByName` do repositório, que exclui um objeto ProductCategory pelo nome.
      */
     @Test
-    @Transactional //
+    @Transactional
     public void deleteByNameMethod() {
         try {
             productCategoryRepository.deleteByName("Test13");
@@ -176,7 +177,7 @@ public class ProductCategoryRepositoryTest {
      * Testa o método `existsById` do repositório, que verifica se um objeto ProductCategory com um determinado ID existe.
      */
     @Test
-    public void existsByIdMethod() {
+    void existsByIdMethod() {
         System.out.println(productCategoryRepository.existsById(1L));
     }
 
@@ -184,7 +185,7 @@ public class ProductCategoryRepositoryTest {
      * Testa o método `existsByName` do repositório, que verifica se um objeto ProductCategory com um determinado nome existe.
      */
     @Test
-    public void existsByNameMethod() {
+    void existsByNameMethod() {
         System.out.println(productCategoryRepository.existsByName("Test13"));
     }
 
@@ -192,8 +193,8 @@ public class ProductCategoryRepositoryTest {
      * Testa o método `deleteById` do repositório, que exclui um objeto ProductCategory pelo ID.
      */
     @Test
-    @Transactional //
-    public void deleteByIdMethod() {
+    @Transactional
+    void deleteByIdMethod() {
         try {
             productCategoryRepository.deleteById(1L);
             System.out.println("Deleted");
@@ -207,7 +208,7 @@ public class ProductCategoryRepositoryTest {
      */
     @Test
     @Transactional
-    public void deleteAllMethod() {
+    void deleteAllMethod() {
         productCategoryRepository.deleteAll();
     }
 
@@ -216,7 +217,7 @@ public class ProductCategoryRepositoryTest {
      * que busca categorias de produtos por descrição.
      */
     @Test
-    public void searchProductCategoriesByDescriptionMethod() {
+    void searchProductCategoriesByDescriptionMethod() {
         List<ProductCategory> productCategories = productCategoryRepository.searchProductCategoriesByDescription("Test2");
         printProductCategories(productCategories);
     }
@@ -226,7 +227,7 @@ public class ProductCategoryRepositoryTest {
      * que retorna uma lista de categorias de produtos ordenadas por nome.
      */
     @Test
-    public void getProductCategoriesSortedByNameMethod() {
+    void getProductCategoriesSortedByNameMethod() {
         List<ProductCategory> sortedCategories = productCategoryRepository.getProductCategoriesSortedByName();
         printProductCategories(sortedCategories);
     }
@@ -236,7 +237,7 @@ public class ProductCategoryRepositoryTest {
      * que lista categorias de produtos por material.
      */
     @Test
-    public void getProductCategoriesByMaterialMethod() {
+    void getProductCategoriesByMaterialMethod() {
         List<ProductCategory> categoriesByMaterial = productCategoryRepository.getProductCategoriesByMaterial("Test3");
         printProductCategories(categoriesByMaterial);
     }
