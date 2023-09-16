@@ -72,6 +72,12 @@ public class User {
             columnDefinition = "VARCHAR(5000)")
     private String picture;
 
+    @OneToOne
+    @JoinColumn(name = "address_id",
+            nullable = false,
+            columnDefinition = "BIGINT UNSIGNED")
+    private Address address;
+
     @Override
     public String toString() {
         return "{\n" +

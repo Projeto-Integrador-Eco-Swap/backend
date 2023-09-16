@@ -3,6 +3,7 @@ package com.generation.backend.repository;
 import com.generation.backend.entity.ProductCategory;
 import jakarta.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -79,6 +80,7 @@ public class ProductCategoryRepositoryTest {
      * Testa o método `findAll` do repositório, que busca todos os objetos ProductCategory.
      */
     @Test
+    @DisplayName("Teste de findAll")
     public void findAllMethod() {
         List<ProductCategory> productCategoryList = productCategoryRepository.findAll();
 

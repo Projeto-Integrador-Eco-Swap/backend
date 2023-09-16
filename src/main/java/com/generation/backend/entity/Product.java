@@ -1,15 +1,6 @@
 package com.generation.backend.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -33,6 +24,18 @@ import java.time.LocalDateTime;
                         columnNames = "name"
                 )
         })
+@NamedNativeQueries(
+        @NamedNativeQuery(
+                name = "findByPrice",
+                query = "SELECT * FROM tb_products WHERE price = :price",
+                resultClass = Product.class
+        )
+)
+@NamedQuery(
+        name = "Product.findByPrice",
+        query = "SELECT p FROM products p WHERE p.price = :price"
+)
+
 public class Product {
 
     @Id

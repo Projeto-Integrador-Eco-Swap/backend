@@ -66,7 +66,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             @Param("minPrice") BigDecimal minPrice,
             @Param("maxPrice") BigDecimal maxPrice
     );
-    
+
     /**
      * Verifica se um produto com o nome especificado existe.
      *
