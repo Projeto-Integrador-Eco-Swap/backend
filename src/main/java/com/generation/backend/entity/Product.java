@@ -2,9 +2,7 @@ package com.generation.backend.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,8 +10,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "products")
 @Table(
         name = "tb_products",
@@ -23,28 +24,25 @@ import java.time.LocalDateTime;
                         name = "unique_name",
                         columnNames = "name"
                 )
-        })
-@NamedNativeQueries(
-        @NamedNativeQuery(
-                name = "findByPrice",
-                query = "SELECT * FROM tb_products WHERE price = :price",
-                resultClass = Product.class
-        )
+        },
+        indexes = {
+                @Index(
+                        name = "idx_name",
+                        columnList = "name"
+                )
+        }
 )
-@NamedQuery(
-        name = "Product.findByPrice",
-        query = "SELECT p FROM products p WHERE p.price = :price"
-)
-
 public class Product {
 
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY,
             generator = "product_sequence")
+    @Column(
+            name = "product_id",
+            columnDefinition = "BIGINT UNSIGNED"
+    )
     @EqualsAndHashCode.Include
-    @Column(name = "product_id",
-            columnDefinition = "BIGINT UNSIGNED")
     private Long id;
 
     @Column(name = "name",

@@ -19,14 +19,16 @@ import lombok.Builder;
  * Classe que representa uma entidade de endereço.
  */
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "address")
-@Table(name = "tb_address",
-        schema = "db_ecoSwap")
-@Builder
+@Table(
+        name = "tb_address",
+        schema = "db_ecoSwap"
+)
 public class Address {
 
     @Id
@@ -34,60 +36,62 @@ public class Address {
             strategy = GenerationType.IDENTITY,
             generator = "address_sequence"
     )
-    @Column(name = "id_address",
-            columnDefinition = "bigint unsigned")
+    @Column(
+            name = "id_address",
+            columnDefinition = "BIGINT UNSIGNED"
+    )
     @EqualsAndHashCode.Include
     private Long id;
 
     @Column(name = "cep",
-            columnDefinition = "varchar(11)",
+            columnDefinition = "VARCHAR(14)",
             nullable = false)
     @CEP
     private String cep;
 
     @Column(name = "logradouro",
-            columnDefinition = "varchar(255)",
+            columnDefinition = "VARCHAR(255)",
             nullable = false)
     private String logradouro;
 
     @Column(name = "bairro",
-            columnDefinition = "varchar(255)",
+            columnDefinition = "VARCHAR(255)",
             nullable = false)
     private String bairro;
 
     @Column(name = "localidade",
-            columnDefinition = "varchar(255)",
+            columnDefinition = "VARCHAR(255)",
             nullable = false)
     private String localidade;
 
     @Column(name = "uf",
-            columnDefinition = "varchar(2)",
+            columnDefinition = "VARCHAR(2)",
             nullable = false)
     @UF
     private String uf;
 
     @Column(name = "ibge",
-            columnDefinition = "varchar(255)",
+            columnDefinition = "VARCHAR(255)",
             nullable = false)
     private String ibge;
 
     @Column(name = "gia",
-            columnDefinition = "varchar(255)",
+            columnDefinition = "VARCHAR(255)",
             nullable = false)
     private String gia;
 
     @Column(name = "ddd",
-            columnDefinition = "varchar(255)",
+            columnDefinition = "VARCHAR(255)",
             nullable = false)
     private String ddd;
 
     @Column(name = "siafi",
-            columnDefinition = "varchar(255)",
+            columnDefinition = "VARCHAR(255)",
             nullable = false)
     private String siafi;
 
     @Column(name = "complemento",
-            columnDefinition = "varchar(255)")
+            columnDefinition = "VARCHAR(255)")
     private String complemento;
 
     /**

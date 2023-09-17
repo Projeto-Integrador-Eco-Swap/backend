@@ -248,7 +248,7 @@ public class ProductRepositoryTest {
     @Test
     @Transactional
     void existsByNameMethod() {
-        boolean exists = productRepository.existsByName("Iphone 15 Pro Max");
+        boolean exists = productRepository.existsProductByName("Iphone 15 Pro Max");
         System.out.println("Product with name 'Iphone 15 Pro Max' exists: " + exists);
     }
 
@@ -284,7 +284,7 @@ public class ProductRepositoryTest {
      */
     @Test
     void existsByActivationMethod() {
-        boolean exists = !productRepository.findProductsByActivation(true).isEmpty();
+        boolean exists = !productRepository.findProductsByActive(true).isEmpty();
         System.out.println("Activated products exist: " + exists);
     }
 }

@@ -3,7 +3,9 @@ package com.generation.backend.service.implementation;
 import com.generation.backend.entity.OrderItem;
 import com.generation.backend.repository.OrderItemRepository;
 import com.generation.backend.service.OrderItemService;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +28,8 @@ public class OrderItemServiceImpl implements OrderItemService {
      *
      * @param orderItemRepository O repositório de itens de pedido.
      */
+    @Contract(pure = true)
+    @Autowired
     public OrderItemServiceImpl(OrderItemRepository orderItemRepository) {
         this.orderItemRepository = orderItemRepository;
     }

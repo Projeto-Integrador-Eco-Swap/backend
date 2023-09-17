@@ -1,4 +1,4 @@
-package com.generation.backend.entity;
+package com.generation.backend.entity.Enums;
 
 /**
  * Enumeração que representa os possíveis estados de um pedido.

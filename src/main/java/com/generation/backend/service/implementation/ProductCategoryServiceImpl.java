@@ -6,6 +6,7 @@ import com.generation.backend.exception.InvalidNameProductCategoryException;
 import com.generation.backend.exception.InvalidProductCategoryException;
 import com.generation.backend.repository.ProductCategoryRepository;
 import com.generation.backend.service.ProductCategoryService;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
      *
      * @param productCategoryRepository Repositório de categorias de produtos.
      */
+    @Contract(pure = true)
     @Autowired
     public ProductCategoryServiceImpl(ProductCategoryRepository productCategoryRepository) {
         this.productCategoryRepository = productCategoryRepository;

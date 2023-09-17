@@ -1,5 +1,7 @@
 package com.generation.backend.handler;
 
+import com.generation.backend.exception.EmailUserNotFoundException;
+import com.generation.backend.exception.InvalidAddressIdException;
 import com.generation.backend.exception.InvalidIdProductCategoryException;
 import com.generation.backend.exception.InvalidNameProductCategoryException;
 import com.generation.backend.exception.InvalidProductCategoryException;
@@ -22,10 +24,11 @@ public class RestResponseEntityExceptionHandler {
      * @return Um ResponseEntity contendo um objeto ApiError com informações sobre a exceção.
      */
     @ExceptionHandler({
+            EmailUserNotFoundException.class,
+            InvalidAddressIdException.class,
             InvalidIdProductCategoryException.class,
             InvalidNameProductCategoryException.class,
             InvalidProductCategoryException.class,
-            Exception.class
     })
     protected ResponseEntity<Object> handleException(@NotNull Exception ex) {
         ApiError apiError = buildApiError(ex.getMessage());

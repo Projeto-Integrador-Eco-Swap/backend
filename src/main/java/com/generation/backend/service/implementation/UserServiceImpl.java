@@ -3,7 +3,9 @@ package com.generation.backend.service.implementation;
 import com.generation.backend.entity.User;
 import com.generation.backend.repository.UserRepository;
 import com.generation.backend.service.UserService;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,6 +30,8 @@ public class UserServiceImpl implements UserService {
      *
      * @param userRepository O repositório de usuários.
      */
+    @Contract(pure = true)
+    @Autowired
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -139,28 +143,26 @@ public class UserServiceImpl implements UserService {
      * Exclui um usuário pelo seu ID.
      *
      * @param id O ID do usuário a ser excluído.
-     * @return Um mapa contendo uma mensagem de sucesso após a exclusão.
      * @throws IllegalArgumentException Se o usuário não for encontrado.
      */
     @Override
-    public Map<String, String> deleteUserById(Long id) {
+    public void deleteUserById(Long id) {
         User user = findUserById(id);
         userRepository.delete(user);
-        return createSuccessResponse();
+        createSuccessResponse();
     }
 
     /**
      * Exclui um usuário pelo seu nome.
      *
      * @param firstName O nome do usuário a ser excluído.
-     * @return Um mapa contendo uma mensagem de status da exclusão.
      * @throws IllegalArgumentException Se o usuário não for encontrado.
      */
     @Override
-    public Map<String, String> deleteUserByName(String firstName) {
+    public void deleteUserByName(String firstName) {
         User user = findUserByName(firstName);
         userRepository.delete(user);
-        return createSuccessResponse();
+        createSuccessResponse();
     }
 
     /**
@@ -282,6 +284,7 @@ public class UserServiceImpl implements UserService {
      * @param user O usuário a ser validado.
      * @throws IllegalArgumentException Se algum dado do usuário for inválido.
      */
+    @Contract("null -> fail")
     private void validateUserForCreation(User user) {
         if (user == null) {
             throw new IllegalArgumentException("O usuário a ser criado não deve ser nulo.");

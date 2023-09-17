@@ -4,14 +4,16 @@ import com.generation.backend.annotation.validator.CEPValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Anotação para validar o formato de CEP (Código de Endereçamento Postal).
  */
-@Target({FIELD})
+@Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {CEPValidator.class})
 @Documented

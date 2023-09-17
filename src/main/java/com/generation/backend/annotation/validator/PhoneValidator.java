@@ -3,12 +3,14 @@ package com.generation.backend.annotation.validator;
 import com.generation.backend.annotation.Phone;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.executable.ValidateOnExecution;
 
 import java.util.regex.Pattern;
 
 /**
  * Validador personalizado para números de telefone brasileiros.
  */
+@ValidateOnExecution
 public class PhoneValidator implements ConstraintValidator<Phone, String> {
 
     /**

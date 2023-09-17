@@ -8,20 +8,29 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity(name = "users")
-@Table(name = "tb_users",
+@Table(
+        name = "tb_users",
         schema = "db_ecoSwap",
         uniqueConstraints = {
                 @UniqueConstraint(
                         columnNames = "email",
                         name = "unique_email"
                 )
-        })
+        },
+        indexes = {
+                @Index(
+                        name = "idx_user_email",
+                        columnList = "email"
+                )
+        }
+)
 public class User {
 
     @Id

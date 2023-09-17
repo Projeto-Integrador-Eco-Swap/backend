@@ -5,7 +5,9 @@ import com.generation.backend.exception.InvalidAddressIdException;
 import com.generation.backend.repository.AddressRepository;
 import com.generation.backend.repository.ProductCategoryRepository;
 import com.generation.backend.service.AddressService;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +30,8 @@ public class AddressServiceImpl implements AddressService {
      *
      * @param addressRepository O repositório de endereços.
      */
+    @Contract(pure = true)
+    @Autowired
     public AddressServiceImpl(AddressRepository addressRepository,
                               ProductCategoryRepository productCategoryRepository) {
         this.addressRepository = addressRepository;

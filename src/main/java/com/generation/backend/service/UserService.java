@@ -3,7 +3,6 @@ package com.generation.backend.service;
 import com.generation.backend.entity.User;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Interface que define os serviços relacionados a usuários.
@@ -61,18 +60,15 @@ public interface UserService {
      * Exclui um usuário pelo seu identificador único (ID).
      *
      * @param id O ID do usuário a ser excluído.
-     * @return Um mapa contendo uma mensagem de status da exclusão.
      */
-    Map<String, String> deleteUserById(Long id);
+    void deleteUserById(Long id);
 
     /**
      * Exclui um usuário pelo seu firstName.
      *
      * @param firstName O nome do usuário a ser excluído.
-     * @return Um mapa contendo uma mensagem de status da exclusão.
      */
-    Map<String, String> deleteUserByName(String firstName);
-
+    void deleteUserByName(String firstName);
 
     /**
      * Atualiza a senha de um usuário existente.
@@ -82,9 +78,13 @@ public interface UserService {
      */
     User updateUserPassword(User user);
 
-
+    /**
+     * Atualiza o email de um usuário existente.
+     *
+     * @param user O usuário atualizado.
+     * @return O usuário atualizado.
+     */
     User updateUserEmail(User user);
-    
 
     /**
      * Obtém um usuário pelo sua  data de nascimento.
@@ -94,15 +94,11 @@ public interface UserService {
      */
     User getUserByBirthDay(String birthDate);
 
-    
-
     /**
-     * Exclui um usuário pela sua data de nascimento.
+     * Exclui um usuário pelo sua data de nascimento.
      *
      * @param birthDate A data de nascimento do usuário a ser excluído.
-     * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
      */
-
     void deleteUserByBirthDay(String birthDate);
 
     /**

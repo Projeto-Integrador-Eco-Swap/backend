@@ -3,7 +3,9 @@ package com.generation.backend.controller;
 import com.generation.backend.entity.User;
 import com.generation.backend.service.UserService;
 import jakarta.transaction.Transactional;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +35,8 @@ public class UsersController {
      *
      * @param userService O serviço para usuários.
      */
+    @Contract(pure = true)
+    @Autowired
     public UsersController(UserService userService) {
         this.userService = userService;
     }

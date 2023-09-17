@@ -4,7 +4,9 @@ import com.generation.backend.entity.Product;
 import com.generation.backend.entity.ProductCategory;
 import com.generation.backend.repository.ProductRepository;
 import com.generation.backend.service.ProductService;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -28,6 +30,8 @@ public class ProductServiceImpl implements ProductService {
      *
      * @param productRepository O repositório de produtos.
      */
+    @Contract(pure = true)
+    @Autowired
     public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
@@ -37,6 +41,7 @@ public class ProductServiceImpl implements ProductService {
      *
      * @return Uma lista contendo todos os produtos no sistema.
      */
+
     @Override
     public List<Product> getAllProducts() {
         return productRepository.findAll();
@@ -196,7 +201,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public List<Product> getProductsByActivation(Boolean isActivated) {
-        return productRepository.findProductsByActivation(isActivated);
+        return productRepository.findProductsByActive(isActivated);
     }
 
     /**

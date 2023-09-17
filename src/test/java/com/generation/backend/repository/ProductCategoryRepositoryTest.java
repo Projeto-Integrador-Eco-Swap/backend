@@ -112,7 +112,6 @@ public class ProductCategoryRepositoryTest {
         return jsonBuilder.toString();
     }
 
-
     /**
      * Testa o método `findById` do repositório, que busca um objeto ProductCategory por ID.
      */
