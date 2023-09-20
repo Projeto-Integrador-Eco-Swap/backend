@@ -3,7 +3,9 @@ package com.generation.backend.service.implementation;
 import com.generation.backend.entity.User;
 import com.generation.backend.repository.UserRepository;
 import com.generation.backend.service.UserService;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,6 +30,8 @@ public class UserServiceImpl implements UserService {
      *
      * @param userRepository O repositório de usuários.
      */
+    @Contract(pure = true)
+    @Autowired
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -73,14 +77,14 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Obtém um usuário pelo seu nome.
+     * Obtém um usuário pelo seu firstName.
      *
-     * @param name O nome do usuário a ser obtido.
+     * @param firstName O nome do usuário a ser obtido.
      * @return O usuário com o nome especificado, ou nulo se não encontrado.
      */
     @Override
-    public User getUserByName(String name) {
-        return userRepository.findByName(name);
+    public User getUserByName(String firstName) {
+        return userRepository.findByFirstName(firstName);
     }
 
     /**
@@ -96,7 +100,8 @@ public class UserServiceImpl implements UserService {
 
         User existingUser = findUserById(user.getId());
 
-        existingUser.setName(user.getName());
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
         existingUser.setEmail(user.getEmail());
         existingUser.setPassword(user.getPassword());
         existingUser.setPicture(user.getPicture());
@@ -138,35 +143,37 @@ public class UserServiceImpl implements UserService {
      * Exclui um usuário pelo seu ID.
      *
      * @param id O ID do usuário a ser excluído.
-     * @return Um mapa contendo uma mensagem de sucesso após a exclusão.
      * @throws IllegalArgumentException Se o usuário não for encontrado.
      */
     @Override
-    public Map<String, String> deleteUserById(Long id) {
+    public void deleteUserById(Long id) {
         User user = findUserById(id);
         userRepository.delete(user);
-        return createSuccessResponse();
+        createSuccessResponse();
     }
 
     /**
      * Exclui um usuário pelo seu nome.
      *
-     * @param name O nome do usuário a ser excluído.
-     * @return Um mapa contendo uma mensagem de status da exclusão.
+     * @param firstName O nome do usuário a ser excluído.
      * @throws IllegalArgumentException Se o usuário não for encontrado.
      */
     @Override
-    public Map<String, String> deleteUserByName(String name) {
-        User user = findUserByName(name);
+    public void deleteUserByName(String firstName) {
+        User user = findUserByName(firstName);
         userRepository.delete(user);
-        return createSuccessResponse();
+        createSuccessResponse();
     }
 
     /**
      * Atualiza a senha de um usuário existente.
+     * <p>
+     * Este método permite atualizar a senha de um usuário existente com base nas informações
+     * fornecidas no objeto User. O usuário atualizado é retornado como resultado.
      *
-     * @param user O usuário atualizado.
+     * @param user O objeto User com a senha atualizada.
      * @return O usuário atualizado.
+     * @throws IllegalArgumentException Se o usuário não for encontrado com o ID especificado.
      */
     @Override
     public User updateUserPassword(@NotNull User user) {
@@ -178,28 +185,22 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Obtém um usuário pelo seu nome e senha.
+     * Atualiza o endereço de e-mail de um usuário existente.
+     * <p>
+     * Este método permite atualizar o endereço de e-mail de um usuário existente com base
+     * nas informações fornecidas no objeto User. O usuário atualizado é retornado como resultado.
      *
-     * @param name     O nome do usuário a ser obtido.
-     * @param password A senha do usuário a ser obtido.
-     * @return O usuário com o nome e senha especificados, ou null se não encontrado.
+     * @param user O objeto User com o endereço de e-mail atualizado.
+     * @return O usuário atualizado.
+     * @throws IllegalArgumentException Se o usuário não for encontrado com o ID especificado.
      */
     @Override
-    public User getUserByNameAndPassword(String name, String password) {
-        return userRepository.findByNameAndPassword(name, password);
-    }
+    public User updateUserEmail(@NotNull User user) {
+        User existingUser = findUserById(user.getId());
 
-    /**
-     * Procura um usuário pelo nome e lança uma exceção se não for encontrado.
-     *
-     * @param name  O nome do usuário a ser encontrado.
-     * @param email
-     * @return O usuário encontrado.
-     * @throws IllegalArgumentException Se o usuário não for encontrado.
-     */
-    @Override
-    public User getUserByNameAndEmail(String name, String email) {
-        return userRepository.findByNameAndEmail(name, email);
+        existingUser.setEmail(user.getEmail());
+
+        return userRepository.saveAndFlush(existingUser);
     }
 
     /**
@@ -213,43 +214,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByBirthDate(LocalDate.parse(birthDate));
     }
 
-
-    /**
-     * Exclui um usuário pelo seu nome e senha.
-     *
-     * @param name     O nome do usuário a ser excluído.
-     * @param password A senha do usuário a ser excluído.
-     * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
-     */
-    @Override
-    public void deleteUserByNameAndPassword(String name, String password) {
-        User userToDelete = userRepository.findByNameAndPassword(name, password);
-
-        if (userToDelete != null) {
-            userRepository.delete(userToDelete);
-        } else {
-            throw new IllegalArgumentException("Usuário com o nome e senha especificados não encontrado.");
-        }
-    }
-
-    /**
-     * Exclui um usuário pelo seu nome e email.
-     *
-     * @param name  O nome do usuário a ser excluído.
-     * @param email O email do usuário a ser excluído.
-     * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
-     */
-    @Override
-    public void deleteUserByNameAndEmail(String name, String email) {
-        User userToDelete = userRepository.findByNameAndEmail(name, email);
-
-        if (userToDelete != null) {
-            userRepository.delete(userToDelete);
-        } else {
-            throw new IllegalArgumentException("Usuário com o nome e email especificados não encontrado.");
-        }
-    }
-
     /**
      * Exclui um usuário pela sua data de nascimento.
      *
@@ -260,21 +224,23 @@ public class UserServiceImpl implements UserService {
         User userToDelete = userRepository.findByBirthDate(LocalDate.parse(birthDate));
 
         if (userToDelete != null) {
-            // Se o usuário for encontrado, exclua-o.
             userRepository.delete(userToDelete);
         } else {
-            // Caso contrário, lance uma exceção ou lide com a situação de usuário não encontrado de outra forma.
             throw new IllegalArgumentException("Usuário com a data de nascimento especificada não encontrado.");
         }
     }
 
     /**
      * Exclui todos os usuários.
+     * <p>
+     * Este método exclui todos os registros de usuários do repositório, resultando
+     * na exclusão de todos os usuários da aplicação.
      */
     @Override
     public void deleteAllUsers() {
         userRepository.deleteAll();
     }
+
 
     /**
      * Procura um usuário pelo ID e lança uma exceção se não for encontrado.
@@ -285,18 +251,20 @@ public class UserServiceImpl implements UserService {
      */
     private User findUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com o ID " + id + ". Não foi possível excluí-lo."));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Usuário não encontrado com o ID " + id + ". " +
+                                "Não foi possível excluí-lo."));
     }
 
     /**
      * Procura um usuário pelo nome e lança uma exceção se não for encontrado.
      *
-     * @param name O nome do usuário a ser encontrado.
+     * @param firstName O nome do usuário a ser encontrado.
      * @return O usuário encontrado.
      * @throws IllegalArgumentException Se o usuário não for encontrado.
      */
-    private User findUserByName(String name) {
-        return userRepository.findByName(name);
+    private User findUserByName(String firstName) {
+        return userRepository.findByFirstName(firstName);
     }
 
     /**
@@ -316,12 +284,13 @@ public class UserServiceImpl implements UserService {
      * @param user O usuário a ser validado.
      * @throws IllegalArgumentException Se algum dado do usuário for inválido.
      */
+    @Contract("null -> fail")
     private void validateUserForCreation(User user) {
         if (user == null) {
             throw new IllegalArgumentException("O usuário a ser criado não deve ser nulo.");
         }
 
-        if (user.getName() == null || user.getName().isEmpty()) {
+        if (user.getFirstName() == null || user.getFirstName().isEmpty()) {
             throw new IllegalArgumentException("O nome do usuário não pode estar em branco.");
         }
 

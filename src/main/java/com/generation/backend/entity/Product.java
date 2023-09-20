@@ -1,19 +1,8 @@
 package com.generation.backend.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -21,8 +10,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "products")
 @Table(
         name = "tb_products",
@@ -32,16 +24,25 @@ import java.time.LocalDateTime;
                         name = "unique_name",
                         columnNames = "name"
                 )
-        })
+        },
+        indexes = {
+                @Index(
+                        name = "idx_name",
+                        columnList = "name"
+                )
+        }
+)
 public class Product {
 
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY,
             generator = "product_sequence")
+    @Column(
+            name = "product_id",
+            columnDefinition = "BIGINT UNSIGNED"
+    )
     @EqualsAndHashCode.Include
-    @Column(name = "product_id",
-            columnDefinition = "BIGINT UNSIGNED")
     private Long id;
 
     @Column(name = "name",
@@ -58,7 +59,7 @@ public class Product {
     @Column(name = "image",
             nullable = false,
             columnDefinition = "VARCHAR(5000)")
-    private String Url;
+    private String image;
 
     @Column(name = "is_activated",
             nullable = false,
@@ -79,8 +80,26 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "productcategory_id",
-            nullable = false,
             columnDefinition = "BIGINT UNSIGNED",
             foreignKey = @ForeignKey(name = "fk_product_category"))
     private ProductCategory category;
+
+    @Override
+    public String toString() {
+        return "{\n" +
+                "\t\"id\": " + id + ",\n" +
+                "\t\"name\": \"" + name + "\",\n" +
+                "\t\"price\": " + price + ",\n" +
+                "\t\"image\": \"" + image + "\",\n" +
+                "\t\"isActivated\": " + isActivated + ",\n" +
+                "\t\"dataCreated\": \"" + dataCreated + "\",\n" +
+                "\t\"lastUpdated\": \"" + lastUpdated + "\",\n" +
+                "\t\"category\": {\n" +
+                "\t\t\"id\": " + category.getId() + ",\n" +
+                "\t\t\"name\": \"" + category.getName() + "\",\n" +
+                "\t\t\"description\": \"" + category.getDescription() + "\",\n" +
+                "\t\t\"material\": \"" + category.getMaterial() + "\"\n" +
+                "\t}\n" +
+                "}";
+    }
 }

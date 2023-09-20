@@ -2,13 +2,20 @@ package com.generation.backend.repository;
 
 import com.generation.backend.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Esta interface atua como um repositório de dados para a entidade Order.
+ * Fornece métodos de acesso a dados para realizar operações CRUD (Criar, Ler, Atualizar e Excluir)
+ * em instâncias de Order no banco de dados.
+ *
+ * @Repository Indica que esta interface é um componente de repositório gerenciado pelo Spring.
+ * JpaRepository fornece métodos padrão para operações de banco de dados, como salvar, excluir e buscar.
+ * Ele opera na entidade Order e utiliza Long como o tipo de dado da chave primária.
+ *
+ * @see Order
+ */
 @Repository
-public interface OrderRepository extends JpaRepository <Order, Long> {
-
-    Order findByName(@Param("name") String name);
-
-    void deleteByName(String name);
+public interface OrderRepository extends JpaRepository<Order, Long> {
 }
+

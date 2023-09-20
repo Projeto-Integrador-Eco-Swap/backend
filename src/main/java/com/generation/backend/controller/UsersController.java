@@ -3,6 +3,9 @@ package com.generation.backend.controller;
 import com.generation.backend.entity.User;
 import com.generation.backend.service.UserService;
 import jakarta.transaction.Transactional;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,6 +35,8 @@ public class UsersController {
      *
      * @param userService O serviço para usuários.
      */
+    @Contract(pure = true)
+    @Autowired
     public UsersController(UserService userService) {
         this.userService = userService;
     }
@@ -47,7 +52,6 @@ public class UsersController {
         User createdUser = userService.createUser(user);
         return ResponseEntity.ok(createdUser);
     }
-
 
     /**
      * Obtém todos os usuários cadastrados no sistema.
@@ -75,38 +79,12 @@ public class UsersController {
     /**
      * Obtém um usuário pelo seu nome.
      *
-     * @param name O nome do usuário a ser obtido.
+     * @param firstName O nome do usuário a ser obtido.
      * @return O usuário com o nome especificado, ou null se não encontrado.
      */
-    @GetMapping("/name/{name}")
-    public ResponseEntity<User> getUserByName(@PathVariable String name) {
-        User user = userService.getUserByName(name);
-        return ResponseEntity.ok(user);
-    }
-
-    /**
-     * Obtém um usuário pelo seu nome e senha.
-     *
-     * @param name O nome do usuário a ser obtido.
-     * @param password A senha do usuário a ser obtido.
-     * @return O usuário com o nome e senha especificados, ou null se não encontrado.
-     */
-    @GetMapping("/name/{name}/password/{password}")
-    public ResponseEntity<User> getUserByNameAndPassword(@PathVariable String name, @PathVariable String password) {
-        User user = userService.getUserByNameAndPassword(name, password);
-        return ResponseEntity.ok(user);
-    }
-
-    /**
-     * Obtém um usuário pelo seu nome e email.
-     *
-     * @param name O nome do usuário a ser obtido.
-     * @param email O email do usuário a ser obtido.
-     * @return O usuário com o nome e email especificados, ou null se não encontrado.
-     */
-    @GetMapping("/name/{name}/email/{email}")
-    public ResponseEntity<User> getUserByNameAndEmail(@PathVariable String name, @PathVariable String email) {
-        User user = userService.getUserByNameAndEmail(name, email);
+    @GetMapping("/name/{firstName}")
+    public ResponseEntity<User> getUserByName(@PathVariable String firstName) {
+        User user = userService.getUserByName(firstName);
         return ResponseEntity.ok(user);
     }
 
@@ -156,11 +134,26 @@ public class UsersController {
      */
     @PutMapping("/update/password")
     @Transactional
-    public ResponseEntity<User> updateUserPassword(@RequestBody User user) {
+    public ResponseEntity<User> updateUserPassword(@RequestBody @NotNull User user) {
         User updatedUser = userService.updateUserPassword(user);
         return ResponseEntity.ok(updatedUser);
     }
 
+    /**
+     * Atualiza o endereço de e-mail de um usuário existente.
+     * <p>
+     * Este endpoint permite a atualização do endereço de e-mail de um usuário existente
+     * com base no ID fornecido. O usuário atualizado é retornado como resposta.
+     *
+     * @param user O usuário com as informações atualizadas.
+     * @return O usuário atualizado com o novo endereço de e-mail.
+     */
+    @PostMapping("/users/updateEmail")
+    @Transactional
+    public ResponseEntity<User> updateUserEmail(@RequestBody @NotNull User user) {
+        User existingUser = userService.updateUserEmail(user);
+        return ResponseEntity.ok(existingUser);
+    }
 
     /**
      * Exclui um usuário pelo seu ID.
@@ -177,40 +170,15 @@ public class UsersController {
     /**
      * Exclui um usuário pelo seu nome.
      *
-     * @param name O nome do usuário a ser excluído.
+     * @param firstName O nome do usuário a ser excluído.
      * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
      */
-    @DeleteMapping("/delete/name/{name}")
-    public ResponseEntity<Void> deleteUserByName(@PathVariable String name) {
-        userService.deleteUserByName(name);
+    @DeleteMapping("/delete/name/{firstName}")
+    public ResponseEntity<Void> deleteUserByName(@PathVariable String firstName) {
+        userService.deleteUserByName(firstName);
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * Exclui um usuário pelo seu nome e senha.
-     *
-     * @param name O nome do usuário a ser excluído.
-     * @param password A senha do usuário a ser excluído.
-     * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
-     */
-    @DeleteMapping("/delete/name/{name}/password/{password}")
-    public ResponseEntity<Void> deleteUserByNameAndPassword(@PathVariable String name, @PathVariable String password) {
-        userService.deleteUserByNameAndPassword(name, password);
-        return ResponseEntity.ok().build();
-    }
-
-    /**
-     * Exclui um usuário pelo seu nome e email.
-     *
-     * @param name O nome do usuário a ser excluído.
-     * @param email O email do usuário a ser excluído.
-     * @return Um ResponseEntity vazio (sem corpo) indicando sucesso.
-     */
-    @DeleteMapping("/delete/name/{name}/email/{email}")
-    public ResponseEntity<Void> deleteUserByNameAndEmail(@PathVariable String name, @PathVariable String email) {
-        userService.deleteUserByNameAndEmail(name, email);
-        return ResponseEntity.ok().build();
-    }
 
     /**
      * Exclui um usuário pela sua data de nascimento.

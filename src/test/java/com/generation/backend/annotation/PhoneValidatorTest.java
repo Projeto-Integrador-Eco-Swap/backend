@@ -1,5 +1,6 @@
 package com.generation.backend.annotation;
 
+import com.generation.backend.annotation.validator.PhoneValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

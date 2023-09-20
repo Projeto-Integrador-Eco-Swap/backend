@@ -6,6 +6,7 @@ import com.generation.backend.exception.InvalidNameProductCategoryException;
 import com.generation.backend.exception.InvalidProductCategoryException;
 import com.generation.backend.repository.ProductCategoryRepository;
 import com.generation.backend.service.ProductCategoryService;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
      *
      * @param productCategoryRepository Repositório de categorias de produtos.
      */
+    @Contract(pure = true)
     @Autowired
     public ProductCategoryServiceImpl(ProductCategoryRepository productCategoryRepository) {
         this.productCategoryRepository = productCategoryRepository;
@@ -153,6 +155,51 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
         return productCategoryRepository.saveAndFlush(existingProductCategory);
     }
+
+    /**
+     * Retorna uma lista de categorias de produtos com base em uma descrição parcial.
+     *
+     * @param description A descrição parcial pela qual as categorias serão filtradas.
+     * @return Uma lista de categorias de produtos correspondentes à descrição parcial especificada.
+     */
+    @Override
+    public List<ProductCategory> searchProductCategoriesByDescription(String description) {
+        return productCategoryRepository.searchProductCategoriesByDescription(description);
+    }
+
+    /**
+     * Retorna uma lista de categorias de produtos ordenadas pelo nome.
+     *
+     * @return Uma lista de categorias de produtos ordenadas alfabeticamente pelo nome.
+     */
+    @Override
+    public List<ProductCategory> getProductCategoriesSortedByName() {
+        return productCategoryRepository.getProductCategoriesSortedByName();
+    }
+
+    /**
+     * Retorna uma lista de categorias de produtos com base em um material específico.
+     *
+     * @param material O material pelo qual as categorias serão filtradas.
+     * @return Uma lista de categorias de produtos correspondentes ao material especificado.
+     */
+    @Override
+    public List<ProductCategory> getProductCategoriesByMaterial(String material) {
+        return productCategoryRepository.getProductCategoriesByMaterial(material);
+    }
+
+    /**
+     * Retorna uma lista de categorias de produtos com base em uma descrição exata.
+     *
+     * @param description A descrição exata pela qual as categorias serão filtradas.
+     * @return Uma lista de categorias de produtos correspondentes à descrição exata especificada.
+     */
+    @Override
+    public List<ProductCategory> getProductCategoriesByExactDescription(String description) {
+        return productCategoryRepository.getProductCategoriesByExactDescription(description);
+    }
+
+
 
     /**
      * Exclui uma categoria de produtos pelo seu identificador único (ID).

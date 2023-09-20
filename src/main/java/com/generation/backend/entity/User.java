@@ -1,6 +1,8 @@
 package com.generation.backend.entity;
 
 import com.generation.backend.annotation.Phone;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -8,20 +10,29 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity(name = "users")
-@Table(name = "tb_Users",
-        schema = "db_ecoswap",
+@Table(
+        name = "tb_users",
+        schema = "db_ecoSwap",
         uniqueConstraints = {
                 @UniqueConstraint(
                         columnNames = "email",
                         name = "unique_email"
                 )
-        })
+        },
+        indexes = {
+                @Index(
+                        name = "idx_user_email",
+                        columnList = "email"
+                )
+        }
+)
 public class User {
 
     @Id
@@ -29,17 +40,23 @@ public class User {
             strategy = GenerationType.IDENTITY,
             generator = "users_sequence"
     )
-    @Column(name = "id",
+    @Column(name = "user_id",
             nullable = false,
             columnDefinition = "BIGINT UNSIGNED")
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "name",
+    @Column(name = "first_name",
             nullable = false,
             columnDefinition = "VARCHAR(255)")
-    private String name;
+    private String firstName;
 
+    @Column(name = "last_name",
+            nullable = false,
+            columnDefinition = "VARCHAR(255)")
+    private String lastName;
+    
+    @Schema(example = "email@email.com.br")
     @Email
     @Column(name = "email",
             nullable = false,
@@ -66,4 +83,23 @@ public class User {
     @Column(name = "picture",
             columnDefinition = "VARCHAR(5000)")
     private String picture;
+
+    @OneToOne
+    @JoinColumn(name = "address_id",
+            
+            columnDefinition = "BIGINT UNSIGNED")
+    private Address address;
+
+    @Override
+    public String toString() {
+        return "{\n" +
+                "\t\"id\": " + id + ",\n" +
+                "\t\"name\": \"" + firstName + "\",\n" +
+                "\t\"email\": \"" + email + "\",\n" +
+                "\t\"password\": \"" + password + "\",\n" +
+                "\t\"phone\": \"" + phone + "\",\n" +
+                "\t\"birthDate\": \"" + birthDate + "\",\n" +
+                "\t\"picture\": \"" + picture + "\"\n" +
+                "}";
+    }
 }
