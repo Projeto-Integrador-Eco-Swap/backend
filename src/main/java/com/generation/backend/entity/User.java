@@ -1,6 +1,8 @@
 package com.generation.backend.entity;
 
 import com.generation.backend.annotation.Phone;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -53,7 +55,8 @@ public class User {
             nullable = false,
             columnDefinition = "VARCHAR(255)")
     private String lastName;
-
+    
+    @Schema(example = "email@email.com.br")
     @Email
     @Column(name = "email",
             nullable = false,
@@ -83,7 +86,7 @@ public class User {
 
     @OneToOne
     @JoinColumn(name = "address_id",
-            nullable = false,
+            
             columnDefinition = "BIGINT UNSIGNED")
     private Address address;
 
