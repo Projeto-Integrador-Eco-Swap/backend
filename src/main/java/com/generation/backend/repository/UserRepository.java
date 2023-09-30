@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * Esta interface atua como um repositório de dados para a entidade User.
@@ -119,4 +120,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM users AS u " +
             "WHERE u.email = :email")
     User findByEmail(@Param("email") String email);
+    
+    Optional<User> findByUserName (String firstName);
 }

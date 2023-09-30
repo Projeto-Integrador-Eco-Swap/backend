@@ -1,12 +1,20 @@
 package com.generation.backend.service.implementation;
 
 import com.generation.backend.entity.User;
+import com.generation.backend.entity.UserLogin;
 import com.generation.backend.repository.UserRepository;
+import com.generation.backend.security.copy.JwtService;
 import com.generation.backend.service.UserService;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -302,4 +310,93 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("A senha do usuário não pode estar em branco.");
         }
     }
-}
+    
+
+    	
+
+    	@Autowired
+        private JwtService jwtService;
+
+        @Autowired
+        private AuthenticationManager authenticationManager;
+
+    	public Optional<User> cadastrarUsuario(User user) {
+
+    		if (userRepository.findByUserName(user.getFirstName()).isPresent())
+    			return Optional.empty();
+
+    		user.setPassword(criptografarSenha(user.getPassword()));
+
+    		return Optional.of(userRepository.save(user));
+    	
+    	}
+
+    	public Optional<User> atualizarUsuario(User user) {
+    		
+    		if(userRepository.findById(user.getId()).isPresent()) {
+
+    			Optional<User> buscaUsuario = userRepository.findByUserName(user.getFirstName());
+
+    			if ( (buscaUsuario.isPresent()) && ( buscaUsuario.get().getId() != user.getId()))
+    				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
+
+    			user.setPassword(criptografarSenha(user.getPassword()));
+
+    			return Optional.ofNullable(userRepository.save(user));
+    			
+    		}
+
+    		return Optional.empty();
+    	
+    	}	
+
+    	public Optional<UserLogin> autenticarUsuario(Optional<UserLogin> usuarioLogin) {
+            
+            // Gera o Objeto de autenticação
+    		var credenciais = new UsernamePasswordAuthenticationToken(usuarioLogin.get().getUser(), usuarioLogin.get().getPassword());
+    		
+            // Autentica o Usuario
+    		Authentication authentication = authenticationManager.authenticate(credenciais);
+            
+            // Se a autenticação foi efetuada com sucesso
+    		if (authentication.isAuthenticated()) {
+
+                // Busca os dados do usuário
+    			Optional<User> usuario = userRepository.findByUserName(usuarioLogin.get().getUser());
+
+                // Se o usuário foi encontrado
+    			if (usuario.isPresent()) {
+
+                    // Preenche o Objeto usuarioLogin com os dados encontrados 
+    			   usuarioLogin.get().setId(usuario.get().getId());
+                    usuarioLogin.get().setFirstName(usuario.get().getFirstName());
+                   //Todo: criar
+                   //usuarioLogin.get().setFoto(usuario.get().getFoto());
+                    
+                    usuarioLogin.get().setToken(gerarToken(usuarioLogin.get().getUser()));
+                    usuarioLogin.get().setPassword("");
+    				
+                     // Retorna o Objeto preenchido
+    			   return usuarioLogin;
+    			
+    			}
+
+            } 
+                
+    		return Optional.empty();
+
+        }
+
+    	private String criptografarSenha(String senha) {
+
+    		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    		
+    		return encoder.encode(senha);
+
+    	}
+
+    	private String gerarToken(String usuario) {
+    		return "Bearer " + jwtService.generateToken(usuario);
+    	}
+
+    }

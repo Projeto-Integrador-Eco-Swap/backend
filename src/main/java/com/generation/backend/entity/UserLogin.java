@@ -10,9 +10,11 @@ import lombok.Setter;
 public class UserLogin {
 
 	private Long id;
-	private String name;
+	private String firstName;
+	private String lastName;
 	private String user;
 	private String password;
 	private String picture;
 	private String token;
+	
 }
