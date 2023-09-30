@@ -1,12 +1,20 @@
 package com.generation.backend.service.implementation;
 
 import com.generation.backend.entity.User;
+import com.generation.backend.entity.UserLogin;
 import com.generation.backend.repository.UserRepository;
+import com.generation.backend.security.JwtService;
 import com.generation.backend.service.UserService;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -19,21 +27,130 @@ import java.util.Optional;
  */
 @Service
 public class UserServiceImpl implements UserService {
-
     /**
      * O repositório de usuários.
      */
     private final UserRepository userRepository;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     /**
      * Cria um novo serviço de usuário.
      *
-     * @param userRepository O repositório de usuários.
+     * @param userRepository        O repositório de usuários.
+     * @param jwtService
+     * @param authenticationManager
      */
     @Contract(pure = true)
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, JwtService jwtService, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+    }
+
+    /**
+     * Cadastra um novo usuário com base nas informações fornecidas.
+     *
+     * @param user Um objeto Optional contendo as informações do usuário a ser cadastrado.
+     * @return Um objeto Optional contendo os detalhes do usuário cadastrado, se o cadastro for bem-sucedido.
+     * @throws ResponseStatusException Se o usuário já existir, uma exceção com código de status HTTP 400 (BAD_REQUEST) será lançada.
+     */
+    @Override
+    public Optional<User> cadastrarUsuario(@NotNull Optional<UserLogin> user) {
+
+            Optional<User> buscaUsuario = userRepository.findByUserName(user.get().getUser());
+            if (buscaUsuario.isPresent())
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
+
+            User usuario = new User();
+            usuario.setFirstName(user.get().getUser());
+            usuario.setPassword(criptografarSenha(user.get().getPassword()));
+
+            return Optional.of(userRepository.save(usuario));
+
+    }
+
+    /**
+     * Atualiza as informações de um usuário com base nas informações fornecidas.
+     *
+     * @param user Um objeto Optional contendo as informações do usuário a ser atualizado.
+     * @return Um objeto Optional contendo os detalhes do usuário atualizado, se a atualização for bem-sucedida.
+     * @throws ResponseStatusException Se o usuário não existir, uma exceção com código de status HTTP 400 (BAD_REQUEST) será lançada.
+     */
+    @Override
+    public Optional<User> atualizarUsuario(@NotNull Optional<UserLogin> user) {
+
+            Optional<User> buscaUsuario = userRepository.findByUserName(user.get().getUser());
+            if (buscaUsuario.isEmpty())
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário não existe!", null);
+
+            User usuario = new User();
+            usuario.setFirstName(user.get().getUser());
+            usuario.setPassword(criptografarSenha(user.get().getPassword()));
+
+            return Optional.of(userRepository.save(usuario));
+    }
+
+    /**
+     * Autentica um usuário com base nas credenciais fornecidas.
+     *
+     * @param usuarioLogin Um objeto Optional contendo as credenciais do usuário para autenticação.
+     * @return Um objeto Optional contendo os detalhes do usuário autenticado, se a autenticação for bem-sucedida.
+ */
+    @Override
+    public Optional<UserLogin> autenticarUsuario(@NotNull Optional<UserLogin> usuarioLogin) {
+
+        // Gera o Objeto de autenticação
+        var credenciais = new UsernamePasswordAuthenticationToken(usuarioLogin.get().getUser(), usuarioLogin.get().getPassword());
+
+        // Autentica o Usuario
+        Authentication authentication = authenticationManager.authenticate(credenciais);
+
+        // Se a autenticação foi efetuada com sucesso
+        if (authentication.isAuthenticated()) {
+
+            // Busca os dados do usuário
+            Optional<User> usuario = userRepository.findByUserName(usuarioLogin.get().getUser());
+
+            // Se o usuário foi encontrado
+            if (usuario.isPresent()) {
+
+                usuarioLogin.get().setId(usuario.get().getId());
+                usuarioLogin.get().setFirstName(usuario.get().getFirstName());
+                //Todo: criar
+                //usuarioLogin.get().setFoto(usuario.get().getFoto());
+
+                usuarioLogin.get().setToken(gerarToken(usuarioLogin.get().getUser()));
+                usuarioLogin.get().setPassword("");
+
+                // Retorna o Objeto preenchido
+                return usuarioLogin;
+
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Criptografa a senha do usuário usando o algoritmo BCrypt.
+     *
+     * @param senha A senha a ser criptografada.
+     * @return A senha criptografada.
+     */
+    private String criptografarSenha(String senha) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.encode(senha);
+    }
+
+    /**
+     * Gera um token de autenticação JWT (JSON Web Token) para o usuário especificado.
+     *
+     * @param usuario O nome de usuário para o qual o token JWT será gerado.
+     * @return Uma string contendo o token JWT no formato "Bearer {token}".
+     */
+    private @NotNull String gerarToken(String usuario) {
+        return "Bearer " + jwtService.generateToken(usuario);
     }
 
     /**
@@ -60,7 +177,6 @@ public class UserServiceImpl implements UserService {
         if (user.getId() != null) {
             throw new IllegalArgumentException("O usuário a ser criado não deve ter um ID.");
         }
-
         return userRepository.saveAndFlush(user);
     }
 
@@ -94,7 +210,6 @@ public class UserServiceImpl implements UserService {
      * @return O usuário atualizado.
      * @throws IllegalArgumentException Se o usuário não possui um ID ou não for encontrado.
      */
-    @Override
     public User updateUser(@NotNull User user) {
         validateUserIdForUpdate(user);
 
@@ -119,11 +234,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUserBirthDate(@NotNull User user) {
         validateUserIdForUpdate(user);
-
         User existingUser = findUserById(user.getId());
-
         existingUser.setBirthDate(user.getBirthDate());
-
         return userRepository.saveAndFlush(existingUser);
     }
 
@@ -178,9 +290,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUserPassword(@NotNull User user) {
         User existingUser = findUserById(user.getId());
-
         existingUser.setPassword(user.getPassword());
-
         return userRepository.saveAndFlush(existingUser);
     }
 
@@ -197,9 +307,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUserEmail(@NotNull User user) {
         User existingUser = findUserById(user.getId());
-
         existingUser.setEmail(user.getEmail());
-
         return userRepository.saveAndFlush(existingUser);
     }
 

@@ -1,13 +1,18 @@
 package com.generation.backend.service;
 
 import com.generation.backend.entity.User;
+import com.generation.backend.entity.UserLogin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Interface que define os serviços relacionados a usuários.
  */
 public interface UserService {
+
+    Optional<UserLogin> autenticarUsuario(@NotNull Optional<UserLogin> usuarioLogin);
 
     /**
      * Obtém uma lista de todos os usuários.
@@ -39,14 +44,6 @@ public interface UserService {
      * @return O usuário com o nome especificado, ou null se não encontrado.
      */
     User getUserByName(String firstName);
-
-    /**
-     * Atualiza um usuário existente.
-     *
-     * @param user O usuário atualizado.
-     * @return O usuário atualizado.
-     */
-    User updateUser(User user);
 
     /**
      * Atualiza o nome de um usuário existente.
@@ -105,5 +102,9 @@ public interface UserService {
      * Exclui todos os usuários.
      */
     void deleteAllUsers();
+
+    Optional<User> cadastrarUsuario(@NotNull Optional<UserLogin> user);
+
+    Optional<User> atualizarUsuario(@NotNull Optional<UserLogin> user);
 
 }

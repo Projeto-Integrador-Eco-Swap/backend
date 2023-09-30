@@ -1,6 +1,8 @@
 package com.generation.backend.repository;
 
 import com.generation.backend.entity.User;
+import com.generation.backend.entity.UserLogin;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -8,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * Esta interface atua como um repositório de dados para a entidade User.
@@ -119,4 +122,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM users AS u " +
             "WHERE u.email = :email")
     User findByEmail(@Param("email") String email);
-}
+
+    @Query("SELECT u FROM users AS u " +
+            "WHERE u.firstName = :userName")
+    Optional<User> findByUserName(String userName);
+    }
