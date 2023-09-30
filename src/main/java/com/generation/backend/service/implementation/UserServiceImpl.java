@@ -59,15 +59,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> cadastrarUsuario(@NotNull Optional<UserLogin> user) {
 
-            Optional<User> buscaUsuario = userRepository.findByUserName(user.get().getUser());
-            if (buscaUsuario.isPresent())
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
+        Optional<User> buscaUsuario = userRepository.findByUserName(user.get().getUser());
+        if (buscaUsuario.isPresent())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
 
-            User usuario = new User();
-            usuario.setFirstName(user.get().getUser());
-            usuario.setPassword(criptografarSenha(user.get().getPassword()));
+        User usuario = new User();
+        usuario.setFirstName(user.get().getUser());
+        usuario.setPassword(criptografarSenha(user.get().getPassword()));
 
-            return Optional.of(userRepository.save(usuario));
+        return Optional.of(userRepository.save(usuario));
 
     }
 
@@ -81,15 +81,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> atualizarUsuario(@NotNull Optional<UserLogin> user) {
 
-            Optional<User> buscaUsuario = userRepository.findByUserName(user.get().getUser());
-            if (buscaUsuario.isEmpty())
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário não existe!", null);
+        Optional<User> buscaUsuario = userRepository.findByUserName(user.get().getUser());
+        if (buscaUsuario.isEmpty())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário não existe!", null);
 
-            User usuario = new User();
-            usuario.setFirstName(user.get().getUser());
-            usuario.setPassword(criptografarSenha(user.get().getPassword()));
+        User usuario = new User();
+        usuario.setFirstName(user.get().getUser());
+        usuario.setPassword(criptografarSenha(user.get().getPassword()));
 
-            return Optional.of(userRepository.save(usuario));
+        return Optional.of(userRepository.save(usuario));
     }
 
     /**
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
      *
      * @param usuarioLogin Um objeto Optional contendo as credenciais do usuário para autenticação.
      * @return Um objeto Optional contendo os detalhes do usuário autenticado, se a autenticação for bem-sucedida.
- */
+     */
     @Override
     public Optional<UserLogin> autenticarUsuario(@NotNull Optional<UserLogin> usuarioLogin) {
 

@@ -79,15 +79,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * Este método executa uma consulta JPQL para buscar um usuário com base na sua data de nascimento.
      *
      * <p>Esta consulta seleciona um usuário cuja data de nascimento corresponda exatamente à data fornecida como parâmetro.</p>
-     *<p>
-     * @param birthDate A data de nascimento a ser usada como critério de busca para encontrar o usuário.
      * <p>
+     *
      * @param birthDate A data de nascimento a ser usada como critério de busca para encontrar o usuário.
-     * <p>
+     *                  <p>
+     * @param birthDate A data de nascimento a ser usada como critério de busca para encontrar o usuário.
+     *                  <p>
      * @return Um objeto User que corresponde à data de nascimento fornecida, ou null se nenhum usuário for encontrado.
      * <p>
      * @throws DataAccessException Se ocorrer algum erro ao acessar os dados no banco de dados.
-     * <p>
+     *                             <p>
      * @implNote Esta consulta utiliza uma consulta JPQL para buscar usuários.
      * A consulta procura por correspondências exatas no campo "birthDate" do usuário.
      * <p>
@@ -103,18 +104,18 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * Este método executa uma consulta JPQL para buscar um usuário com base no seu endereço de e-mail.
      *
      * <p>Esta consulta seleciona um usuário cujo endereço de e-mail corresponda exatamente ao e-mail fornecido como parâmetro.</p>
-     *<p>
-     * @param email O endereço de e-mail a ser usado como critério de busca para encontrar o usuário.
-
      * <p>
+     *
+     * @param email O endereço de e-mail a ser usado como critério de busca para encontrar o usuário.
+     *
+     *              <p>
      * @return Um objeto User que corresponde ao endereço de e-mail fornecido, ou null se nenhum usuário for encontrado.
      * <p>
      * @throws DataAccessException Se ocorrer algum erro ao acessar os dados no banco de dados.
-     * <p>
+     *                             <p>
      * @implNote Esta consulta utiliza uma consulta JPQL para buscar usuários.
      * A consulta procura por correspondências exatas no campo "email" do usuário.
      * <p>
-     *
      * @returnCode - 200 OK: A consulta é executada com sucesso e o usuário correspondente ao endereço de e-mail é retornado.<p>
      * <p>         - 404 Not Found: Se nenhum usuário for encontrado com o endereço de e-mail fornecido.
      * @see User
@@ -126,4 +127,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM users AS u " +
             "WHERE u.firstName = :userName")
     Optional<User> findByUserName(String userName);
-    }
+}
