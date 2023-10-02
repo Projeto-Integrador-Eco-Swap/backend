@@ -49,7 +49,7 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
      *
      * @see ProductCategory
      */
-    @Query("SELECT pc FROM productcategory AS pc " +
+    @Query("SELECT pc FROM productcategories AS pc " +
             "WHERE pc.name = :name")
     ProductCategory findByName(@Param("name") String name);
 
@@ -111,7 +111,7 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
      * independentemente do uso de maiúsculas ou minúsculas.</p>
      * @see ProductCategory
      */
-    @Query("SELECT pc FROM productcategory AS pc " +
+    @Query("SELECT pc FROM productcategories AS pc " +
             "WHERE pc.name " +
             "LIKE %:description%")
     List<ProductCategory> searchProductCategoriesByDescription(@Param("description") String description);
@@ -135,7 +135,7 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
      * </p>
      * @see ProductCategory
      */
-    @Query("SELECT pc FROM productcategory AS pc " +
+    @Query("SELECT pc FROM productcategories AS pc " +
             "ORDER BY pc.name")
     List<ProductCategory> getProductCategoriesSortedByName();
 
@@ -175,7 +175,7 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
      *
      * @see ProductCategory
      */
-    @Query("SELECT pc FROM productcategory AS pc " +
+    @Query("SELECT pc FROM productcategories AS pc " +
             "WHERE pc.material = :material")
     List<ProductCategory> getProductCategoriesByMaterial(@Param("material") String material);
 
@@ -216,7 +216,7 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
      * Neste exemplo, a consulta busca todas as categorias de produtos com a descrição exata "eletrônicos".
      * @see ProductCategory
      */
-    @Query("SELECT pc FROM productcategory AS pc " +
+    @Query("SELECT pc FROM productcategories AS pc " +
             "WHERE pc.description = :description")
     List<ProductCategory> getProductCategoriesByExactDescription(@Param("description") String description);
 }

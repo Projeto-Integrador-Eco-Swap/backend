@@ -1,26 +1,12 @@
 package com.generation.backend.controller;
 
 import com.generation.backend.entity.User;
-import com.generation.backend.entity.UserLogin;
 import com.generation.backend.service.UserService;
-import com.generation.backend.service.implementation.UserServiceImpl;
 import jakarta.transaction.Transactional;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Controlador responsável por gerenciar endpoints relacionados aos usuários.
@@ -34,7 +20,6 @@ public class UsersController {
      * O serviço para usuários.
      */
     private final UserService userService;
-    private final UserServiceImpl usuarioServiceImpl;
 
     /**
      * Construtor que injeta o serviço de usuários.
@@ -42,10 +27,19 @@ public class UsersController {
      * @param userService O serviço de usuários.
      */
     @Contract(pure = true)
-    @Autowired
-    public UsersController(UserService userService, UserServiceImpl usuarioServiceImpl) {
+    public UsersController(UserService userService) {
         this.userService = userService;
-        this.usuarioServiceImpl = usuarioServiceImpl;
+    }
+
+    /**
+     * Obtém todos os usuários cadastrados no sistema.
+     *
+     * @return Uma lista de todos os usuários.
+     */
+    @GetMapping("/all")
+    public ResponseEntity<Iterable<User>> getAllUsers() {
+        Iterable<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 
     /**
@@ -58,56 +52,6 @@ public class UsersController {
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User createdUser = userService.createUser(user);
         return ResponseEntity.ok(createdUser);
-    }
-
-    /**
-     * Realiza a autenticação do usuário com as informações fornecidas.
-     *
-     * @param userLogin As informações de login do usuário.
-     * @return Um ResponseEntity contendo os detalhes do usuário autenticado com código de status HTTP correspondente.
-     */
-    @PostMapping("/login")
-    public ResponseEntity<UserLogin> autenticarUsuario(@RequestBody UserLogin userLogin) {
-        Optional<UserLogin> resposta = usuarioServiceImpl.autenticarUsuario(Optional.ofNullable(userLogin));
-        return resposta.map(usuario -> ResponseEntity.status(HttpStatus.OK).body(usuario))
-                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-    }
-
-    /**
-     * Cadastra um novo usuário com as informações fornecidas.
-     *
-     * @param userLogin As informações do usuário a serem cadastradas.
-     * @return Um ResponseEntity contendo os detalhes do usuário cadastrado com código de status HTTP correspondente.
-     */
-    @PostMapping("/cadastrar")
-    public ResponseEntity<User> cadastrarUsuario(@RequestBody UserLogin userLogin) {
-        Optional<User> resposta = usuarioServiceImpl.cadastrarUsuario(Optional.ofNullable(userLogin));
-        return resposta.map(usuario -> ResponseEntity.status(HttpStatus.CREATED).body(usuario))
-                .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
-    }
-
-    /**
-     * Atualiza as informações de um usuário com base nos dados fornecidos.
-     *
-     * @param userLogin As informações de usuário a serem atualizadas.
-     * @return Um ResponseEntity contendo os detalhes do usuário atualizado com código de status HTTP correspondente.
-     */
-    @PutMapping("/atualizar")
-    public ResponseEntity<User> atualizarUsuario(@RequestBody UserLogin userLogin) {
-        Optional<User> resposta = usuarioServiceImpl.atualizarUsuario(Optional.ofNullable(userLogin));
-        return resposta.map(usuario -> ResponseEntity.status(HttpStatus.OK).body(usuario))
-                .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
-    }
-
-    /**
-     * Obtém todos os usuários cadastrados no sistema.
-     *
-     * @return Uma lista de todos os usuários.
-     */
-    @GetMapping("/all")
-    public ResponseEntity<Iterable<User>> getAllUsers() {
-        Iterable<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
     }
 
     /**
@@ -144,6 +88,19 @@ public class UsersController {
     public ResponseEntity<User> getUserByBirthDay(@PathVariable String birthDate) {
         User user = userService.getUserByBirthDay(birthDate);
         return ResponseEntity.ok(user);
+    }
+
+    /**
+     * Atualiza o nome de um usuário existente.
+     *
+     * @param user O usuário atualizado.
+     * @return O usuário atualizado.
+     */
+    @PutMapping("/update/user")
+    @Transactional
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
+        User updatedUser = userService.updateUser(user);
+        return ResponseEntity.ok(updatedUser);
     }
 
     /**

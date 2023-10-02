@@ -12,7 +12,6 @@ import java.util.Optional;
  */
 public interface UserService {
 
-    Optional<UserLogin> autenticarUsuario(@NotNull Optional<UserLogin> usuarioLogin);
 
     /**
      * Obtém uma lista de todos os usuários.
@@ -103,8 +102,17 @@ public interface UserService {
      */
     void deleteAllUsers();
 
-    Optional<User> cadastrarUsuario(@NotNull Optional<UserLogin> user);
+    /**
+     * Atualiza as informações de um usuário existente.
+     *
+     * Este método permite atualizar os atributos de um usuário existente no sistema.
+     * Ele recebe uma instância da classe User, que representa o usuário a ser atualizado,
+     * e atualiza as informações do usuário com os dados fornecidos.
+     *
+     * @param user O objeto User contendo as informações atualizadas.
+     * @return O objeto User atualizado com as informações mais recentes após a atualização.
+     * @throws IllegalArgumentException Se o objeto de usuário fornecido for nulo.
+     */
 
-    Optional<User> atualizarUsuario(@NotNull Optional<UserLogin> user);
-
+    User updateUser(@NotNull User user);
 }

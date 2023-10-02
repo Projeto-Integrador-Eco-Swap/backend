@@ -104,7 +104,7 @@ public interface ProductCategoryService {
      * @return Uma lista de categorias de produtos cuja descrição contenha o texto especificado. A consulta é insensível a maiúsculas e minúsculas, o que significa que as descrições são comparadas de forma case-insensitive.
      * @throws DataAccessException Se ocorrer um erro de acesso a dados durante a execução da consulta, uma exceção do tipo DataAccessException será lançada. Essa exceção pode ocorrer em caso de problemas de conexão com o banco de dados, erros de sintaxe na consulta, entre outros.
      */
-    @Query("SELECT pc FROM productcategory AS pc WHERE LOWER(pc.description) LIKE %:description%")
+    @Query("SELECT pc FROM productcategories AS pc WHERE LOWER(pc.description) LIKE %:description%")
     List<ProductCategory> searchProductCategoriesByDescription(@Param("description") String description);
 
     /**
@@ -114,7 +114,7 @@ public interface ProductCategoryService {
      *
      * @return Uma lista de categorias de produtos ordenadas pelo nome.
      */
-    @Query("SELECT pc FROM productcategory AS pc ORDER BY pc.name")
+    @Query("SELECT pc FROM productcategories AS pc ORDER BY pc.name")
     List<ProductCategory> getProductCategoriesSortedByName();
 
     /**
@@ -125,7 +125,7 @@ public interface ProductCategoryService {
      * @param material O material a ser usado na filtragem.
      * @return Uma lista de categorias de produtos cujo material corresponde ao especificado.
      */
-    @Query("SELECT pc FROM productcategory AS pc WHERE LOWER(pc.material) = LOWER(:material)")
+    @Query("SELECT pc FROM productcategories AS pc WHERE LOWER(pc.material) = LOWER(:material)")
     List<ProductCategory> getProductCategoriesByMaterial(@Param("material") String material);
 
     /**
@@ -136,6 +136,6 @@ public interface ProductCategoryService {
      * @param description A descrição a ser usada na filtragem.
      * @return Uma lista de categorias de produtos cuja descrição corresponde exatamente à especificada.
      */
-    @Query("SELECT pc FROM productcategory AS pc WHERE pc.description = :description")
+    @Query("SELECT pc FROM productcategories AS pc WHERE pc.description = :description")
     List<ProductCategory> getProductCategoriesByExactDescription(@Param("description") String description);
 }

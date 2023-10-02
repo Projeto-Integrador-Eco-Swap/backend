@@ -4,7 +4,6 @@ import com.generation.backend.entity.Product;
 import com.generation.backend.entity.ProductCategory;
 import com.generation.backend.service.ProductService;
 import org.jetbrains.annotations.Contract;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -49,7 +48,6 @@ public class ProductController {
      * @param productService O serviço para produtos.
      */
     @Contract(pure = true)
-    @Autowired
     public ProductController(ProductService productService) {
         this.productService = productService;
     }

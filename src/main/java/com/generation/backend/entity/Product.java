@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Entity(name = "products")
 @Table(
         name = "tb_products",
-        schema = "db_ecoswap",
+        schema = "db_ecoSwap",
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "unique_name",
@@ -35,9 +35,7 @@ import java.time.LocalDateTime;
 public class Product {
 
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.IDENTITY,
-            generator = "product_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(
             name = "product_id",
             columnDefinition = "BIGINT UNSIGNED"
@@ -45,37 +43,31 @@ public class Product {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "name",
-            nullable = false,
-            columnDefinition = "VARCHAR(50)")
+    @Column(columnDefinition = "VARCHAR(50)",
+            nullable = false)
     private String name;
 
-    @Column(name = "price",
-            nullable = false,
-            columnDefinition = "DECIMAL(10,2)")
+    @Column(columnDefinition = "DECIMAL(10,2)",
+            nullable = false)
     @Positive(message = "O preço deve ser positivo.")
     private BigDecimal price;
 
-    @Column(name = "image",
-            nullable = false,
-            columnDefinition = "VARCHAR(5000)")
+    @Column(columnDefinition = "VARCHAR(5000)",
+            nullable = false)
     private String image;
 
-    @Column(name = "is_activated",
-            nullable = false,
-            columnDefinition = "BOOLEAN DEFAULT TRUE")
+    @Column(columnDefinition = "BOOLEAN DEFAULT TRUE",
+            nullable = false)
     private boolean isActivated;
 
     @CreationTimestamp
-    @Column(name = "data_created",
-            nullable = false,
-            columnDefinition = "TIMESTAMP")
+    @Column(columnDefinition = "TIMESTAMP",
+            nullable = false)
     private LocalDateTime dataCreated;
 
     @UpdateTimestamp
-    @Column(name = "last_updated",
-            nullable = false,
-            columnDefinition = "TIMESTAMP")
+    @Column(columnDefinition = "TIMESTAMP",
+            nullable = false)
     private LocalDateTime lastUpdated;
 
     @ManyToOne

@@ -93,23 +93,9 @@ public class ProductCategoryRepositoryTest {
             } else {
                 isFirst = false;
             }
-            System.out.println(toJson(productCategory));
+            System.out.println(productCategory);
         }
         System.out.println("]");
-    }
-
-    /**
-     * Converte um objeto ProductCategory em uma representação JSON.
-     */
-    @NotNull String toJson(@NotNull ProductCategory productCategory) {
-        StringBuilder jsonBuilder = new StringBuilder();
-        jsonBuilder.append("{\n");
-        jsonBuilder.append("\t\"id\": ").append(productCategory.getId()).append(",\n");
-        jsonBuilder.append("\t\"name\": \"").append(productCategory.getName()).append("\",\n");
-        jsonBuilder.append("\t\"description\": \"").append(productCategory.getDescription()).append("\",\n");
-        jsonBuilder.append("\t\"material\": \"").append(productCategory.getMaterial()).append("\"\n");
-        jsonBuilder.append("}");
-        return jsonBuilder.toString();
     }
 
     /**

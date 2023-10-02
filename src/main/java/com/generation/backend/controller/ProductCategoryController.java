@@ -7,7 +7,6 @@ import com.generation.backend.exception.InvalidProductCategoryException;
 import com.generation.backend.service.ProductCategoryService;
 import jakarta.transaction.Transactional;
 import org.jetbrains.annotations.Contract;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -77,7 +76,6 @@ public class ProductCategoryController {
      * <p>
      * @see ProductCategoryService
      */
-    @Autowired
     @Contract(pure = true)
     public ProductCategoryController(ProductCategoryService productCategoryService) {
         this.productCategoryService = productCategoryService;

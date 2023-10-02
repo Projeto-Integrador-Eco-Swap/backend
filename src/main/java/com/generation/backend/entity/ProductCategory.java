@@ -12,12 +12,13 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "productcategory")
+@Entity(name = "productcategories")
 @Table(
         name = "tb_product_category",
-        schema = "db_ecoswap",
+        schema = "db_ecoSwap",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uk_productcategory_name",
+                @UniqueConstraint(
+                        name = "unique_name",
                         columnNames = "name")
         },
         indexes = {
@@ -28,9 +29,7 @@ import lombok.*;
 public class ProductCategory {
 
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.IDENTITY,
-            generator = "productcategory_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(
             name = "productcategory_id",
             columnDefinition = "BIGINT UNSIGNED"
@@ -38,20 +37,17 @@ public class ProductCategory {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "name",
+    @Column(columnDefinition = "VARCHAR(50)",
             nullable = false,
-            unique = true,
-            columnDefinition = "VARCHAR(50)")
+            unique = true)
     private String name;
 
-    @Column(name = "description",
-            nullable = false,
-            columnDefinition = "VARCHAR(255)")
+    @Column(columnDefinition = "VARCHAR(255)",
+            nullable = false)
     private String description;
 
-    @Column(name = "material",
-            nullable = false,
-            columnDefinition = "VARCHAR(255)")
+    @Column(columnDefinition = "VARCHAR(255)",
+            nullable = false)
     private String material;
 
     @Override

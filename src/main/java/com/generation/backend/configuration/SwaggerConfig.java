@@ -32,8 +32,7 @@ public class SwaggerConfig {
 								.description("GitHub")
 								.url("https://github.com/Projeto-Integrador-Eco-Swap/backend"));
 	}
-	
-	
+
 	@Bean
 	OpenApiCustomizer customerGlobalHeaderOpenApiCustomizer() {
 		return openApi -> {
@@ -52,15 +51,8 @@ public class SwaggerConfig {
 						
 					}));
 		};
-	
-
 }
-
-
 	private ApiResponse createApiResponse(String message) {
 		return new ApiResponse().description(message);
 	}
-
- 
-
 }

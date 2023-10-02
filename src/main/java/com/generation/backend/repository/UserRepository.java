@@ -101,29 +101,45 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByBirthDate(@Param("birthDate") LocalDate birthDate);
 
     /**
-     * Este método executa uma consulta JPQL para buscar um usuário com base no seu endereço de e-mail.
+     * Este método executa uma consulta JPQL para buscar um usuário com base no seu email.
      *
-     * <p>Esta consulta seleciona um usuário cujo endereço de e-mail corresponda exatamente ao e-mail fornecido como parâmetro.</p>
+     * <p>Esta consulta seleciona um usuário cujo email corresponda exatamente ao email fornecido como parâmetro.</p>
      * <p>
      *
-     * @param email O endereço de e-mail a ser usado como critério de busca para encontrar o usuário.
-     *
+     * @param email O email a ser usado como critério de busca para encontrar o usuário.
      *              <p>
-     * @return Um objeto User que corresponde ao endereço de e-mail fornecido, ou null se nenhum usuário for encontrado.
+     * @return Um objeto User que corresponde ao email fornecido, ou null se nenhum usuário for encontrado.
      * <p>
      * @throws DataAccessException Se ocorrer algum erro ao acessar os dados no banco de dados.
      *                             <p>
      * @implNote Esta consulta utiliza uma consulta JPQL para buscar usuários.
      * A consulta procura por correspondências exatas no campo "email" do usuário.
      * <p>
-     * @returnCode - 200 OK: A consulta é executada com sucesso e o usuário correspondente ao endereço de e-mail é retornado.<p>
-     * <p>         - 404 Not Found: Se nenhum usuário for encontrado com o endereço de e-mail fornecido.
+     * @returnCode - 200 OK: A consulta é executada com sucesso e o usuário correspondente ao email é retornado.<p>
+     * <p>- 404 Not Found: Se nenhum usuário for encontrado com o email fornecido.<p>
      * @see User
      */
-    @Query("SELECT u FROM users AS u " +
-            "WHERE u.email = :email")
-    User findByEmail(@Param("email") String email);
+    Optional<User> findByEmail(String email);
 
+    /**
+     * Este método executa uma consulta JPQL para buscar um usuário com base no seu nome de usuário.
+     *
+     * <p>Esta consulta seleciona um usuário cujo nome de usuário corresponda exatamente ao nome de usuário fornecido como parâmetro.</p>
+     * <p>
+     *
+     * @param userName O nome de usuário a ser usado como critério de busca para encontrar o usuário.
+     *                 <p>
+     * @return Um objeto User que corresponde ao nome de usuário fornecido, ou null se nenhum usuário for encontrado.
+     * <p>
+     * @throws DataAccessException Se ocorrer algum erro ao acessar os dados no banco de dados.
+     *                             <p>
+     * @implNote Esta consulta utiliza uma consulta JPQL para buscar usuários.
+     * A consulta procura por correspondências exatas no campo "userName" do usuário.
+     * <p>
+     * @returnCode - 200 OK: A consulta é executada com sucesso e o usuário correspondente ao nome de usuário é retornado.<p>
+     * <p>- 404 Not Found: Se nenhum usuário for encontrado com o nome de usuário fornecido.<p>
+     * @see User
+     */
     @Query("SELECT u FROM users AS u " +
             "WHERE u.firstName = :userName")
     Optional<User> findByUserName(String userName);

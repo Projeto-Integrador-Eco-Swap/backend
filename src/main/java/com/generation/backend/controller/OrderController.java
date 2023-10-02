@@ -4,7 +4,6 @@ import com.generation.backend.entity.Order;
 import com.generation.backend.service.OrderService;
 import jakarta.transaction.Transactional;
 import org.jetbrains.annotations.Contract;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +58,6 @@ public class OrderController {
      * @see OrderService
      */
     @Contract(pure = true)
-    @Autowired
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }

@@ -38,7 +38,6 @@ public class AddressController {
      * @param addressService O serviço para gerenciamento de endereços.
      */
     @Contract(pure = true)
-    @Autowired
     public AddressController(AddressService addressService) {
         this.addressService = addressService;
     }

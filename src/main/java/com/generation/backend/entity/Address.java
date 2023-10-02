@@ -24,7 +24,7 @@ import lombok.Builder;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "address")
+@Entity(name = "addresses")
 @Table(
         name = "tb_address",
         schema = "db_ecoSwap"
@@ -32,66 +32,50 @@ import lombok.Builder;
 public class Address {
 
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.IDENTITY,
-            generator = "address_sequence"
-    )
-    @Column(
-            name = "id_address",
-            columnDefinition = "BIGINT UNSIGNED"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "BIGINT UNSIGNED")
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "cep",
-            columnDefinition = "VARCHAR(14)",
+    @Column(columnDefinition = "VARCHAR(14)",
             nullable = false)
     @CEP
     private String cep;
 
-    @Column(name = "logradouro",
-            columnDefinition = "VARCHAR(255)",
+    @Column(columnDefinition = "VARCHAR(255)",
             nullable = false)
     private String logradouro;
 
-    @Column(name = "bairro",
-            columnDefinition = "VARCHAR(255)",
+    @Column(columnDefinition = "VARCHAR(255)",
             nullable = false)
     private String bairro;
 
-    @Column(name = "localidade",
-            columnDefinition = "VARCHAR(255)",
+    @Column(columnDefinition = "VARCHAR(255)",
             nullable = false)
     private String localidade;
 
-    @Column(name = "uf",
-            columnDefinition = "VARCHAR(2)",
+    @Column(columnDefinition = "VARCHAR(2)",
             nullable = false)
     @UF
     private String uf;
 
-    @Column(name = "ibge",
-            columnDefinition = "VARCHAR(255)",
+    @Column(columnDefinition = "VARCHAR(255)",
             nullable = false)
     private String ibge;
 
-    @Column(name = "gia",
-            columnDefinition = "VARCHAR(255)",
+    @Column(columnDefinition = "VARCHAR(255)",
             nullable = false)
     private String gia;
 
-    @Column(name = "ddd",
-            columnDefinition = "VARCHAR(255)",
+    @Column(columnDefinition = "VARCHAR(255)",
             nullable = false)
     private String ddd;
 
-    @Column(name = "siafi",
-            columnDefinition = "VARCHAR(255)",
+    @Column(columnDefinition = "VARCHAR(255)",
             nullable = false)
     private String siafi;
 
-    @Column(name = "complemento",
-            columnDefinition = "VARCHAR(255)")
+    @Column(columnDefinition = "VARCHAR(255)")
     private String complemento;
 
     /**
@@ -101,18 +85,19 @@ public class Address {
      */
     @Override
     public String toString() {
-        return "Address{" +
-                "id=" + id +
-                ", cep=" + cep +
-                ", logradouro='" + logradouro + '\'' +
-                ", bairro='" + bairro + '\'' +
-                ", localidade='" + localidade + '\'' +
-                ", uf='" + uf + '\'' +
-                ", ibge='" + ibge + '\'' +
-                ", gia='" + gia + '\'' +
-                ", ddd='" + ddd + '\'' +
-                ", siafi='" + siafi + '\'' +
-                ", complemento='" + complemento + '\'' +
-                '}';
+        return "{\n" +
+                "\t\"id\": " + id + ",\n" +
+                "\t\"cep\": " + cep + ",\n" +
+                "\t\"logradouro\": \"" + logradouro + "\",\n" +
+                "\t\"bairro\": \"" + bairro + "\",\n" +
+                "\t\"localidade\": \"" + localidade + "\",\n" +
+                "\t\"uf\": \"" + uf + "\",\n" +
+                "\t\"ibge\": \"" + ibge + "\",\n" +
+                "\t\"gia\": \"" + gia + "\",\n" +
+                "\t\"ddd\": \"" + ddd + "\",\n" +
+                "\t\"siafi\": \"" + siafi + "\",\n" +
+                "\t\"complemento\": \"" + complemento + "\"\n" +
+                "}";
     }
+
 }

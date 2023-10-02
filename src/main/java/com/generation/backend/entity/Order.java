@@ -20,77 +20,73 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "order")
+@Entity(name = "orders")
 @Table(
-        name = "tb_Order",
-        schema = "db_ecoswap"
+        name = "tb_order",
+        schema = "db_ecoSwap"
 )
 public class Order {
 
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.IDENTITY,
-            generator = "order_sequence"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(
-            name = "order_id",
+            name = "order_id", //Não pode mudar essa linha por hipótese alguma
             columnDefinition = "BIGINT UNSIGNED"
     )
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "order_tracking_number",
-            nullable = false,
-            columnDefinition = "VARCHAR(50)")
+    @Column(columnDefinition = "VARCHAR(50)",
+            nullable = false)
     private String orderTrackingNumber;
 
-    @Column(name = "total_quantity",
-            nullable = false,
-            columnDefinition = "INT default 0")
+    @Column(columnDefinition = "INT default 0",
+            nullable = false)
     private int totalQuantity;
 
-    @Column(name = "total_price",
-            nullable = false,
-            columnDefinition = "DECIMAL(15,2) default 0.0")
+    @Column(columnDefinition = "DECIMAL(15,2) default 0.0",
+            nullable = false)
     private BigDecimal totalPrice;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "order_status",
-            nullable = false,
-            columnDefinition = "VARCHAR(15) default 'NEW'")
+    @Column(columnDefinition = "VARCHAR(15) default 'NEW'",
+            nullable = false)
     private OrderStatus orderStatus;
 
     @CreationTimestamp
-    @Column(name = "date_created",
-            nullable = false,
-            columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
+    @Column(columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP",
+            nullable = false)
     private LocalDateTime dateCreated;
 
     @UpdateTimestamp
-    @Column(name = "last_updated",
-            nullable = false,
-            columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
+    @Column(columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
     private LocalDateTime lastUpdated;
 
-    @OneToMany(mappedBy = "order")
-    @Column(name = "itens",
-            nullable = false,
-            columnDefinition = "SET")
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            mappedBy = "order"
+    )
     private Set<OrderItem> items = new HashSet<>();
 
-    @Column(name = "id_card",
-            nullable = false,
-            columnDefinition = "BIGINT UNSIGNED")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "address_id",
+            columnDefinition = "BIGINT UNSIGNED",
+            nullable = false
+    )
+    private Address address;
+
+    @Column(columnDefinition = "VARCHAR(255)",
+            nullable = false)
     private Long idCard;
 
     /**
      * Calcula o valor total do pedido somando os preços dos itens do pedido.
      *
      * @return O valor total do pedido como um objeto BigDecimal.
-     *
      * @implNote Este método itera sobre os itens do pedido e calcula o valor total multiplicando o preço de cada item pela quantidade.
      * Em seguida, soma esses valores para obter o valor total do pedido.
-
      * @see OrderItem
      */
     public BigDecimal getTotalOrderPrice() {
@@ -118,10 +114,8 @@ public class Order {
      * Obtém uma representação em string dos itens do pedido, separados por vírgula e quebra de linha.
      *
      * @return Uma string contendo as representações em string dos itens do pedido, separados por vírgula e quebra de linha.
-     *
      * @implNote Este método utiliza a funcionalidade de stream para mapear cada item do pedido para sua representação em string
      * usando o método `toString` de `OrderItem`. Em seguida, coleta essas representações em uma única string, separando cada item por uma vírgula e quebra de linha.
-
      * @see OrderItem
      */
     private @NotNull String getOrderItemsAsString() {

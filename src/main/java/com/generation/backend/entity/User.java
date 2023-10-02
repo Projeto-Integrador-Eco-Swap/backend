@@ -2,13 +2,19 @@ package com.generation.backend.entity;
 
 import com.generation.backend.annotation.Phone;
 
+import com.generation.backend.entity.Enums.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
@@ -18,12 +24,12 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity(name = "users")
 @Table(
-        name = "tb_users",
+        name = "tb_user",
         schema = "db_ecoSwap",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        columnNames = "email",
-                        name = "unique_email"
+                        name = "unique_email",
+                        columnNames = "email"
                 )
         },
         indexes = {
@@ -33,62 +39,55 @@ import java.time.LocalDate;
                 )
         }
 )
-public class User {
+public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.IDENTITY,
-            generator = "users_sequence"
-    )
-    @Column(name = "user_id",
-            nullable = false,
-            columnDefinition = "BIGINT UNSIGNED")
+    @GeneratedValue
+    @Column(columnDefinition = "BIGINT UNSIGNED",
+            nullable = false)
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "first_name",
-            nullable = false,
-            columnDefinition = "VARCHAR(255)")
+    @Column(columnDefinition = "VARCHAR(60)",
+            nullable = false)
     private String firstName;
 
-    @Column(name = "last_name",
-            nullable = false,
-            columnDefinition = "VARCHAR(255)")
+    @Column(columnDefinition = "VARCHAR(60)",
+            nullable = false)
     private String lastName;
-    
-    @Schema(example = "email@email.com.br")
+
     @Email
-    @Column(name = "email",
-            nullable = false,
-            unique = true,
-            columnDefinition = "VARCHAR(255)")
+    @Schema(example = "email@email.com.br")
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password",
-            nullable = false,
-            columnDefinition = "VARCHAR(255)")
+    @Column(columnDefinition = "VARCHAR(255)",
+            nullable = false)
     private String password;
 
-    @Column(name = "phone",
-            columnDefinition = "VARCHAR(255)")
     @Phone
+    @Column(columnDefinition = "VARCHAR(20)")
     private String phone;
 
-    @Column(name = "birth_date",
-            nullable = false,
-            columnDefinition = "DATE")
+    @Column(columnDefinition = "DATE",
+            nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
-    @Column(name = "picture",
-            columnDefinition = "VARCHAR(5000)")
+    @Column(columnDefinition = "VARCHAR(5000)")
     private String picture;
 
-    @OneToOne
-    @JoinColumn(name = "address_id",
-            
-            columnDefinition = "BIGINT UNSIGNED")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "address_id",
+            columnDefinition = "BIGINT UNSIGNED"
+    )
     private Address address;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(5) default 'USER'",
+            nullable = false)
+    private Role role;
 
     @Override
     public String toString() {
@@ -101,5 +100,40 @@ public class User {
                 "\t\"birthDate\": \"" + birthDate + "\",\n" +
                 "\t\"picture\": \"" + picture + "\"\n" +
                 "}";
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
