@@ -1,4 +1,4 @@
-package com.generation.projetointegrador;
+package com.generation.ecoswap;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

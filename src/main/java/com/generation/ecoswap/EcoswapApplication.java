@@ -1,4 +1,4 @@
-package com.generation.projetointegrador;
+package com.generation.ecoswap;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

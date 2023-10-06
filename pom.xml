@@ -12,7 +12,7 @@
 	<artifactId>ecoswap</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ecoswap</name>
-	<description>Projeto Integrador Generation - EcoSwap</description>
+	<description>Back-end Projeto Integrador - EcoSwap</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
