@@ -42,7 +42,7 @@ public class ProdutoController {
     @GetMapping("/{id}")
     public ResponseEntity<Produto> getById(@PathVariable Long id) {
         return produtoRepository.findById(id)
-                .map(resposta -> ResponseEntity.ok(resposta))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
