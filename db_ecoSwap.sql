@@ -1,3 +1,0 @@
-	DROP DATABASE IF EXISTS db_ecoSwap;
-	CREATE DATABASE IF NOT EXISTS db_ecoSwap;
-	USE db_ecoSwap;
