@@ -3,10 +3,11 @@ package com.generation.ecoswap.controller;
 import java.util.List;
 import java.util.Optional;
 
-import com.generation.ecoswap.model.Usuario;
-import com.generation.ecoswap.model.UsuarioLogin;
+import com.generation.ecoswap.entity.Usuario;
+import com.generation.ecoswap.entity.UsuarioLogin;
 import com.generation.ecoswap.repository.UsuarioRepository;
 import com.generation.ecoswap.service.UsuarioService;
+import org.jetbrains.annotations.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +27,21 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
+    private final UsuarioRepository usuarioRepository;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    @Contract(pure = true)
+    public UsuarioController(
+            UsuarioService usuarioService,
+            UsuarioRepository usuarioRepository
+    ) {
+        this.usuarioService = usuarioService;
+        this.usuarioRepository = usuarioRepository;
+    }
 
     @GetMapping("/all")
-    public ResponseEntity <List<Usuario>> getAll(){
-
+    public ResponseEntity<List<Usuario>> getAll() {
         return ResponseEntity.ok(usuarioRepository.findAll());
     }
 
@@ -46,8 +53,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/logar")
-    public ResponseEntity<UsuarioLogin> autenticarUsuario(@RequestBody Optional<UsuarioLogin> usuarioLogin){
-
+    public ResponseEntity<UsuarioLogin> autenticarUsuario(@RequestBody Optional<UsuarioLogin> usuarioLogin) {
         return usuarioService.autenticarUsuario(usuarioLogin)
                 .map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
                 .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
@@ -55,7 +61,6 @@ public class UsuarioController {
 
     @PostMapping("/cadastrar")
     public ResponseEntity<Usuario> postUsuario(@RequestBody @Valid Usuario usuario) {
-
         return usuarioService.cadastrarUsuario(usuario)
                 .map(resposta -> ResponseEntity.status(HttpStatus.CREATED).body(resposta))
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
@@ -63,7 +68,6 @@ public class UsuarioController {
 
     @PutMapping("/atualizar")
     public ResponseEntity<Usuario> putUsuario(@Valid @RequestBody Usuario usuario) {
-
         return usuarioService.atualizarUsuario(usuario)
                 .map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());

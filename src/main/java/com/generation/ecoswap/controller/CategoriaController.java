@@ -3,8 +3,10 @@ package com.generation.ecoswap.controller;
 import java.util.List;
 import java.util.Optional;
 
-import com.generation.ecoswap.model.Categoria;
+import com.generation.ecoswap.entity.Categoria;
 import com.generation.ecoswap.repository.CategoriaRepository;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,40 +25,43 @@ import org.springframework.web.server.ResponseStatusException;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping ("/categorias")
-@CrossOrigin (origins = "*", allowedHeaders = "*")
+@RequestMapping("/categorias")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CategoriaController {
 
-    @Autowired
-    private CategoriaRepository categoriaRepository;
+    private final CategoriaRepository categoriaRepository;
 
-    @GetMapping
-    public ResponseEntity<List<Categoria>> getAll(){
-        return ResponseEntity.ok(categoriaRepository.findAll());
+    @Autowired
+    @Contract(pure = true)
+    public CategoriaController(CategoriaRepository categoriaRepository) {
+        this.categoriaRepository = categoriaRepository;
+    }
+
+    @PostMapping("/cadastrar")
+    public ResponseEntity<Categoria> cadastrar(@Valid @RequestBody Categoria categoria) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(categoriaRepository.save(categoria));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> getById(@PathVariable Long id){
+    public ResponseEntity<Categoria> getById(@PathVariable Long id) {
         return categoriaRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @GetMapping("/descricao/{descricao}")
-    public ResponseEntity<List<Categoria>> getByTitle(@PathVariable
-                                                      String descricao){
-        return ResponseEntity.ok(categoriaRepository
-                .findAllByDescricaoContainingIgnoreCase(descricao));
+    public ResponseEntity<Optional<Categoria>> getByTitle(@PathVariable String descricao) {
+        return ResponseEntity.ok(categoriaRepository.findAllByDescricaoContainingIgnoreCase(descricao));
     }
 
-    @PostMapping
-    public ResponseEntity<Categoria> post(@Valid @RequestBody Categoria categoria){
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(categoriaRepository.save(categoria));
+    @GetMapping("/all")
+    public ResponseEntity<List<Categoria>> getAll() {
+        return ResponseEntity.ok(categoriaRepository.findAll());
     }
 
-    @PutMapping
-    public ResponseEntity<Categoria> put(@Valid @RequestBody Categoria categoria){
+    @PutMapping("/atualizar")
+    public ResponseEntity<Categoria> atualizar(@Valid @RequestBody @NotNull Categoria categoria) {
         return categoriaRepository.findById(categoria.getId())
                 .map(resposta -> ResponseEntity.status(HttpStatus.CREATED)
                         .body(categoriaRepository.save(categoria)))
@@ -64,14 +69,13 @@ public class CategoriaController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    @DeleteMapping("/delete/{id}")
+    public void deleteById(@PathVariable Long id) {
         Optional<Categoria> categoria = categoriaRepository.findById(id);
 
-        if(categoria.isEmpty())
+        if (categoria.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         categoriaRepository.deleteById(id);
     }
-
 }
