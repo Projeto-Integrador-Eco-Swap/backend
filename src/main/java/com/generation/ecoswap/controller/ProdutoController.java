@@ -3,12 +3,9 @@ package com.generation.ecoswap.controller;
 import java.util.List;
 import java.util.Optional;
 
-import com.generation.ecoswap.entity.Produto;
+import com.generation.ecoswap.model.Produto;
 import com.generation.ecoswap.repository.CategoriaRepository;
 import com.generation.ecoswap.repository.ProdutoRepository;
-import jakarta.transaction.Transactional;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,29 +28,13 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProdutoController {
 
-    private final ProdutoRepository produtoRepository;
-    private final CategoriaRepository categoriaRepository;
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
     @Autowired
-    @Contract(pure = true)
-    public ProdutoController(
-            ProdutoRepository produtoRepository,
-            CategoriaRepository categoriaRepository
-    ) {
-        this.produtoRepository = produtoRepository;
-        this.categoriaRepository = categoriaRepository;
-    }
+    private CategoriaRepository categoriaRepository;
 
-    @Transactional
-    @PostMapping("/cadastrar")
-    public ResponseEntity<Produto> post(@Valid @RequestBody @NotNull Produto produto) {
-        if (categoriaRepository.existsById(produto.getCategoria().getId()))
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(produtoRepository.save(produto));
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria inexistente", null);
-    }
-
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<Produto>> getAll() {
         return ResponseEntity.ok(produtoRepository.findAll());
     }
@@ -70,9 +51,16 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoRepository.findAllByTituloContainingIgnoreCase(titulo));
     }
 
-    @Transactional
-    @PutMapping("/atualizar")
-    public ResponseEntity<Produto> put(@Valid @RequestBody @NotNull Produto produto) {
+    @PostMapping
+    public ResponseEntity<Produto> post(@Valid @RequestBody Produto produto) {
+        if (categoriaRepository.existsById(produto.getCategoria().getId()))
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(produtoRepository.save(produto));
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria inexistente", null);
+    }
+
+    @PutMapping
+    public ResponseEntity<Produto> put(@Valid @RequestBody Produto produto) {
         if (produtoRepository.existsById(produto.getId())) {
 
             if (categoriaRepository.existsById(produto.getCategoria().getId()))
@@ -80,12 +68,12 @@ public class ProdutoController {
                         .body(produtoRepository.save(produto));
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria inexistente", null);
         }
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    @Transactional
     public void delete(@PathVariable Long id) {
         Optional<Produto> produto = produtoRepository.findById(id);
         if (produto.isEmpty())
