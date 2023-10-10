@@ -21,8 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "categorias")
 @Table(
-        name = "tb_categoria",
-        schema = "db_ecoswap_hi6c"
+        name = "tb_categoria"
 )
 public class Categoria {
 

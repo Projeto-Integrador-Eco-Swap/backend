@@ -21,8 +21,7 @@ import jakarta.validation.constraints.Size;
 @AllArgsConstructor
 @Entity(name = "produtos")
 @Table(
-        name = "tb_produto",
-        schema = "db_ecoswap_hi6c"
+        name = "tb_produto"
 )
 public class Produto {
 
