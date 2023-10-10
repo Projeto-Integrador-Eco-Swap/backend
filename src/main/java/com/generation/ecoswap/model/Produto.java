@@ -19,8 +19,11 @@ import jakarta.validation.constraints.Size;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "tb_produtos")
+@Entity(name = "produtos")
+@Table(
+        name = "tb_produto",
+        schema = "db_ecoswap_hi6c"
+)
 public class Produto {
 
     @Id

@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Entity(name = "usuários")
 @Table(
         name = "tb_usuario",
-        schema = "db_ecoswap"
+        schema = "db_ecoswap_hi6c"
 )
 public class Usuario {
 
