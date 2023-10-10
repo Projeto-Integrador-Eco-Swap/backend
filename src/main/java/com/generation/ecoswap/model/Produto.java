@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -53,6 +54,7 @@ public class Produto {
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL
     )
+
     @JsonIgnoreProperties("produto")
     @JoinColumn(
             name = "categoria_id",
@@ -62,8 +64,16 @@ public class Produto {
     )
     private Categoria categoria;
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.EAGER,
+                cascade = CascadeType.ALL
+    )
     @JsonIgnoreProperties("produto")
+    @JoinColumn (
+            name = "produto_id",
+            referencedColumnName = "id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "FK_usuario_produto")
+    )
     private Usuario usuario;
 
     public Categoria getCategoria() {
