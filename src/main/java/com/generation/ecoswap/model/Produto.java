@@ -52,30 +52,12 @@ public class Produto {
     @Positive(message = "Opa, calma! O preço precisa ser um valor positivo ;)")
     private BigDecimal preco;
 
-    @ManyToOne(
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL
-    )
-
+    @ManyToOne
     @JsonIgnoreProperties("produto")
-    @JoinColumn(
-            name = "categoria_id",
-            referencedColumnName = "id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "FK_categoria_produto")
-    )
     private Categoria categoria;
 
-    @ManyToOne (fetch = FetchType.EAGER,
-                cascade = CascadeType.ALL
-    )
+    @ManyToOne
     @JsonIgnoreProperties("produto")
-    @JoinColumn (
-            name = "produto_id",
-            referencedColumnName = "id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "FK_usuario_produto")
-    )
     private Usuario usuario;
 
     public Categoria getCategoria() {
